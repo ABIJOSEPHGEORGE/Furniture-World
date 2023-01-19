@@ -1,0 +1,91 @@
+<%- include('includes/admin/head') %>
+<%- include('includes/admin/header') %>
+
+<section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
+    <div class="bg-black">
+        <p class="text-white px-3 fw-bold py-3">Coupon / Add Product</p>
+    </div>
+    <div class="form-container d-flex flex-column justify-content-center align-items-center">
+        <p class="text-center text-white fw-bold fs-3">Add Product</p>
+    </div>
+    <form action="/admin/add-category" method="post" class="row d-flex flex-row  px-4" enctype="multipart/form-data">
+        <div class="col-md-6  col-12 row">
+            <div class="form-group files color col-12 text-center">
+                <label>Product Image 1</label>
+                <input type="file" class="form-control" name="product_image" multiple="multiple" required>
+              </div>
+            <div class="form-group files color col-6 text-center">
+                <label>Product Image 2</label>
+                <input type="file" class="form-control text-center" name="product_image" multiple="true" required>
+              </div>
+            <div class="form-group files color col-4">
+                <label>Product Image 3</label>
+                <input type="file" class="form-control" name="product_image" multiple="true" required>
+              </div>
+        </div>
+        <div class="row col-md-6 col-12 px-3">
+            <div class="input-container d-flex flex-column col-12 py-1">
+                <label for="product_name" class="text-white fw-bold fs-5 py-1">Product Name</label>
+                <input type="text" name="product_name" id="product_name" class="rounded border-0 py-2 px-2" placeholder="Product Name" required>
+            </div>
+            <div class="input-container d-flex flex-column col-12 py-1">
+                <label for="product_description" class="text-white fw-bold fs-5 py-1">Product Description</label>
+                <input type="text" name="product_description" id="product_description" class="rounded border-0 py-2 px-2" placeholder="Product Description" required>
+            </div>
+            <div class="input-container d-flex flex-column col-md-6 col-12 py-1">
+                <label for="category" class="text-white fw-bold fs-5 py-1">Category</label>
+                <input type="text" name="category" id="category" class="rounded border-0 py-2 px-2" placeholder="Category" required>
+            </div>
+            <div class="input-container d-flex flex-column col-md-6 col-12 py-1">
+                <label for="sub_category" class="text-white fw-bold fs-5 py-1">Sub Category</label>
+                <input type="text" name="sub_category" id="sub_category" class="rounded border-0 py-2 px-2" placeholder="Sub Category" required>
+            </div>
+            <div class="input-container d-flex flex-column col-md-6 col-12 py-1">
+                <label for="stock" class="text-white fw-bold fs-5 py-1">Stock Available</label>
+                <input type="text" name="stock" id="stock" class="rounded border-0 py-2 px-2" placeholder="Stock Available" required>
+            </div>
+            <div class="input-container d-flex flex-column col-md-6 col-12 py-1">
+                <label for="tags" class="text-white fw-bold fs-5 py-1">Tags</label>
+                <input type="text" name="tags" id="tags" class="rounded border-0 py-2 px-2" placeholder="Tags" required>
+            </div>
+            <div class="measurements row col-12">
+            <label class="text-center text-white fw-bold fs-5 py-1">Measurements</label>
+            <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
+                <label for="width" class="text-white fw-bold fs-5 py-1">Width</label>
+                <input type="text" name="width" id="width" class="rounded border-0 py-2 px-2" placeholder="Width" required>
+            </div>
+            <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
+                <label for="height" class="text-white fw-bold fs-5 py-1">Height</label>
+                <input type="text" name="height" id="height" class="rounded border-0 py-2 px-2" placeholder="Height" required>
+            </div>
+            <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
+                <label for="depth" class="text-white fw-bold fs-5 py-1">Depth</label>
+                <input type="text" name="depth" id="depth" class="rounded border-0 py-2 px-2" placeholder="Depth">
+            </div>
+            <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
+                <label for="max_load" class="text-white fw-bold fs-5 py-1">Max Load</label>
+                <input type="text" name="max_load" id="max_load" class="rounded border-0 py-2 px-2" placeholder="Max Load" required>
+            </div>
+            </div>
+            <div class="input-container d-flex flex-column col-md-6 col-12 py-1">
+                <label for="price" class="text-white fw-bold fs-5 py-1">Price</label>
+                <input type="Number" name="price" id="price" class="rounded border-0 py-2 px-2" placeholder="Price" required>
+            </div>
+            <div class="input-container d-flex flex-column col-md-6 col-12 py-1">
+                <label for="sale_price" class="text-white fw-bold fs-5 py-1">Sale Price</label>
+                <input type="Number" name="sale_price" id="sale_price" class="rounded border-0 py-2 px-2" placeholder="Sale Price" required>
+            </div>
+
+            <%if (typeof err!="undefined" && err) {%>
+                <p class="text-danger text-center"><%=err%></p>
+            <%}%>
+           <div class="d-flex flex-row justify-content-center align-items-center col-12 py-2">
+                <button class="btn bg-white border-0 rounded mx-1 px-4 py-2"><a href="/admin/category-managemnt" class="text-dark text-decoration-none">Cancel</a></button>
+                <button class="btn bg-success border-0 rounded mx-1 px-4 py-2 text-white" type="submit">Add Category</button>
+           </div>
+        </div>
+        
+    </form>
+</section>
+
+<%- include('includes/admin/footer') %>

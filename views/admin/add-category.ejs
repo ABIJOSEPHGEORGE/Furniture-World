@@ -1,0 +1,41 @@
+<%- include('includes/admin/head') %>
+<%- include('includes/admin/header') %>
+
+<section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
+    <div class="bg-black">
+        <p class="text-white px-3 fw-bold py-3">Coupon / Add Category</p>
+    </div>
+    <div class="form-container d-flex flex-column justify-content-center align-items-center">
+        <p class="text-center text-white fw-bold fs-3">Add Category</p>
+    </div>
+    <form action="/admin/add-category" method="post" class="d-flex flex-row align-items-center px-4" enctype="multipart/form-data">
+        <div class="col-6">
+            <div class="form-group files color">
+                <label>Category Image </label>
+                <input type="file" class="form-control" name="category_image" multiple="" required>
+              </div>
+        </div>
+        <div class="d-flex flex-column align-items-center col-6 px-3">
+            <div class="input-container d-flex flex-column col-12 py-1">
+                <label for="category_name" class="text-white fw-bold fs-5 py-1">Category Name</label>
+                <input type="text" name="category_name" id="category_name" class="rounded border-0 py-2 px-2" placeholder="Category Name" required>
+            </div>
+            <div class="input-container d-flex flex-column col-12 py-1">
+                <label for="category_description" class="text-white fw-bold fs-5 py-1">Description</label>
+                <input type="text" name="category_description" id="category_description" class="rounded border-0 py-2 px-2" placeholder="Category Description" required>
+            </div>
+    
+            
+            <%if (typeof err!="undefined" && err) {%>
+                <p class="text-danger text-center"><%=err%></p>
+            <%}%>
+           <div class="d-flex flex-row justify-content-center align-items-center col-12 py-2">
+                <button class="btn bg-white border-0 rounded mx-1 px-4 py-2"><a href="/admin/category-managemnt" class="text-dark text-decoration-none">Cancel</a></button>
+                <button class="btn bg-success border-0 rounded mx-1 px-4 py-2 text-white" type="submit">Add Category</button>
+           </div>
+        </div>
+        
+    </form>
+</section>
+
+<%- include('includes/admin/footer') %>
