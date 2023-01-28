@@ -1,99 +1,212 @@
 <%- include('includes/admin/head') %>
-<%- include('includes/admin/header') %>
+    <%- include('includes/admin/header') %>
 
-<section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
-    <div class="bg-black">
-        <p class="text-white px-3 fw-bold py-3">Product / Edit Product</p>
-    </div>
-    <div class="form-container d-flex flex-column justify-content-center align-items-center">
-        <p class="text-center text-white fw-bold fs-3">Edit Product</p>
-    </div>
-    <form action="/admin/add-product" method="post" class="row d-flex flex-row  px-4" enctype="multipart/form-data" id="my-form">
-        <div class="col-md-6  col-12 row h-75">
-            <div class="form-group files color">
-                <label>Product Images </label>
-                <input type="file" class="form-control" name="product_images" multiple required>
-              </div>
-            <div class="input-container d-flex flex-column col-12 py-1">
-                <label for="product_name" class="text-white fw-bold fs-5 py-1">Product Name</label>
-                <input type="text" name="product_name" id="product_name" class="rounded border-0 py-2 px-2" placeholder="Product Name" value="<%-product.product_name%>" required>
+        <section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
+            <div class="bg-black">
+                <p class="text-white px-3 fw-bold py-3">Product / Edit Product</p>
             </div>
-            <div class="input-container d-flex flex-column col-12 py-1">
-                <label for="product_description" class="text-white fw-bold fs-5 py-1">Product Description</label>
-                <input type="text" name="product_description" id="product_description" class="rounded border-0 py-2 px-2" placeholder="Product Description" value="<%-product.description%>" required>
+            <div class="form-container d-flex flex-column justify-content-center align-items-center">
+                <p class="text-center text-white fw-bold fs-3">Edit Product</p>
             </div>
-        </div>
-        <div class="row col-md-6 col-12 px-3">
-            
-            <div class="dropdown col-6 py-1">
-                <label class="text-white fw-bold fs-5 py-1">Choose Category</label>
-                <select class="btn btn-secondary bg-white text-dark border-0 dropdown-toggle col-12" name="parent_category" type="button" id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <%product.parent_category.forEach((parentcat)=>{%>
-                        <option value="<%-parentcat._id%>"><%-parentcat.category_name%></option>
-                    <%})%>
-                </select>   
-              </div>
+            <form action="/admin/update-product/<%-product._id%>?_method=PUT" method="post"
+                class="row d-flex flex-row  px-4" enctype="multipart/form-data" id="my-form">
+                <div class="col-md-6  col-12 row h-75">
+                    <div class="preview-img p-3 text-center d-block" id="img-preview">
+                        <div class="preview-img row col-12">
+                            <%product.images.forEach((ele)=>{%>
+                                <div class="col-4">
+                                    <img src="<%-ele.URL%>" class="w-75" alt="" srcset="">
+                                </div>
+                                <%})%>
 
-            <div class="dropdown col-6 py-1">
-                <label class="text-white fw-bold fs-5 py-1">Choose Sub Category</label>
-                <select class="btn btn-secondary bg-white text-dark border-0 dropdown-toggle col-12" name="sub_category" type="button" id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <%product.sub_category.forEach((subcat)=>{%>
-                        <option ><%-subcat.sub_category_name%></option>
-                    <%})%>
-                </select> 
-                    
-              </div>
-          
-            <div class="input-container d-flex flex-column  col-md-6 col-12 py-1">
-                <label for="stock" class="text-white fw-bold fs-5 py-1">Stock Available</label>
-                <input type="Number" name="stock" id="stock" class="rounded border-0 py-2 px-2" placeholder="Stock Available" value="<%-product.stock%>" required>
-            </div>
-            <div class="dropdown col-md-6 col-12 py-1">
-                <label class="text-white fw-bold fs-5 py-1">Status</label>
-                <select class="btn btn-secondary bg-white text-dark border-0 dropdown-toggle col-12 py-2" name="status" type="button" id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <option value="true">List</option>
-                    <option value="false">Unlist</option>
-                </select> 
-                    
-              </div>
-            <div class="measurements row col-12">
-            <label class="text-center text-white fw-bold fs-5 py-1">Measurements</label>
-            <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
-                <label for="width" class="text-white fw-bold fs-6 py-1">Width (cm)</label>
-                <input type="Number" name="width" id="width" class="rounded border-0 py-2 px-2" placeholder="Width" value="<%-product.measurements.width%>" required>
-            </div>
-            <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
-                <label for="height" class="text-white fw-bold fs-6 py-1">Height (cm)</label>
-                <input type="Number" name="height" id="height" class="rounded border-0 py-2 px-2" placeholder="Height" value="<%-product.measurements.height%>" required>
-            </div>
-            <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
-                <label for="depth" class="text-white fw-bold fs-6 py-1">Depth (cm)</label>
-                <input type="Number" name="depth" id="depth" class="rounded border-0 py-2 px-2" placeholder="Depth" value="<%-product.measurements.depth%>">
-            </div>
-            <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
-                <label for="max_load" class="text-white fw-bold fs-6 py-1">Max Load (kg)</label>
-                <input type="Number" name="max_load" id="max_load" class="rounded border-0 py-2 px-2" placeholder="Max Load" value="<%-product.measurements.max_load%>"  required>
-            </div>
-            </div>
-            <div class="input-container d-flex flex-column col-md-6 col-12 py-1">
-                <label for="price" class="text-white fw-bold fs-5 py-1">Price</label>
-                <input type="Number" name="price" id="price" class="rounded border-0 py-2 px-2" placeholder="Price" value="<%-product.price%>" required>
-            </div>
-            <div class="input-container d-flex flex-column col-md-6 col-12 py-1">
-                <label for="sale_price" class="text-white fw-bold fs-5 py-1">Sale Price</label>
-                <input type="Number" name="sale_price" id="sale_price" class="rounded border-0 py-2 px-2" placeholder="Sale Price" value="<%-product.sale_price%>" required>
-            </div>
+                        </div>
+                        <a href="#" class="text-white text-decoration-none py-2">
+                            <div class="d-flex flex-row text-center" id="change-img">
+                                Change Image
+                                <span class="material-symbols-outlined">
+                                    edit
+                                </span>
+                            </div>
+                        </a>
 
-            
-        </div>
-        <%if (typeof err!="undefined" && err) {%>
-            <p class="text-danger text-center"><%=err%></p>
-        <%}%>
-       <div class="d-flex flex-row justify-content-center align-items-center col-12 py-2">
-            <button class="btn bg-white border-0 rounded mx-1 px-4 py-2"><a href="/admin/product-management" class="text-dark text-decoration-none">Cancel</a></button>
-            <button class="btn bg-success border-0 rounded mx-1 px-4 py-2 text-white" type="submit">Update Product</button>
-       </div>
-    </form>
-</section>
+                    </div>
+                    <div class="col-12 d-none" id="choose-img">
+                        <div class="row col-12">
+                            <div class="col-4">
+                                <p class="text-center text-white">Choose Image 1</p>
+                                <div class="col-12 bg-white p-2">
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <div
+                                            class="preview-con1 w-75 d-none justify-content-center align-items-center flex-column">
 
-<%- include('includes/admin/footer') %>
+                                            <img alt="" srcset="" id="preview-main1" class="w-75">
+
+                                        </div>
+                                        <label for="product-main1" class="bg-success p-2 text-white">Choose
+                                            Image</label>
+                                        <input type="file" id="product-main1" name="product-image"
+                                            onchange="validateImage(event,1)" class="d-none">
+                                    </div>
+
+                                </div>
+                                <p id="error-msg1" class="text-danger"></p>
+                            </div>
+                            <div class="col-4">
+                                <p class="text-center text-white">Choose Image 2</p>
+                                <div class="col-12 bg-white p-2">
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <div
+                                            class="preview-con2 w-75 d-none justify-content-center align-items-center flex-column">
+
+                                            <img alt="" srcset="" id="preview-main2" class="w-75">
+
+                                        </div>
+                                        <label for="product-main2" class="bg-success p-2 text-white">Choose
+                                            Image</label>
+                                        <input type="file" id="product-main2" name="product-image"
+                                            onchange="validateImage(event,2)" class="d-none">
+                                    </div>
+
+                                </div>
+                                <p id="error-msg2" class="text-danger"></p>
+                            </div>
+                            <div class="col-4">
+                                <p class="text-center text-white">Choose Image 3</p>
+                                <div class="col-12 bg-white p-2">
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <div
+                                            class="preview-con3 w-75 d-none justify-content-center align-items-center flex-column">
+                                            <img alt="" srcset="" id="preview-main3" class="w-75">
+
+                                        </div>
+                                        <label for="product-main3" class="bg-success p-2 text-white">Choose
+                                            Image</label>
+                                        <input type="file" id="product-main3" name="product-image"
+                                            onchange="validateImage(event,3)" class="d-none">
+                                    </div>
+
+                                </div>
+                                <p id="error-msg3" class="text-danger"></p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="input-container d-flex flex-column col-12 py-1">
+                        <label for="product_name" class="text-white fw-bold fs-5 py-1">Product Name</label>
+                        <input type="text" name="product_name" id="product_name" class="rounded border-0 py-2 px-2"
+                            placeholder="Product Name" value="<%-product.product_name%>" required>
+                    </div>
+                    <div class="input-container d-flex flex-column col-12 py-1">
+                        <label for="product_description" class="text-white fw-bold fs-5 py-1">Product
+                            Description</label>
+                        <input type="text" name="product_description" id="product_description"
+                            class="rounded border-0 py-2 px-2" placeholder="Product Description"
+                            value="<%-product.description%>" required>
+                    </div>
+                </div>
+                <div class="row col-md-6 col-12 px-3">
+
+                    <div class="dropdown col-6 py-1">
+                        <label class="text-white fw-bold fs-5 py-1">Parent Category</label>
+                        <%product.parent_category.forEach((ele)=>{%>
+                            <input type="text" value="<%-ele.category_name%>" class="rounded border-0 py-2 px-2"
+                                placeholder="parent category" required>
+                            <%})%>
+
+                    </div>
+                    <div class="dropdown col-6 py-1">
+                        <label class="text-white fw-bold fs-5 py-1">Choose Sub Category</label>
+
+                        <input type="text" value="<%-product.sub_category%>" class="rounded border-0 py-2 px-2"
+                            placeholder="parent category" required>
+
+
+                    </div>
+
+                    <div class="input-container d-flex flex-column  col-md-6 col-12 py-1">
+                        <label for="stock" class="text-white fw-bold fs-5 py-1">Stock Available</label>
+                        <input type="Number" name="stock" id="stock" class="rounded border-0 py-2 px-2"
+                            placeholder="Stock Available" value="<%-product.stock%>" required>
+                    </div>
+                    <div class="dropdown col-md-6 col-12 py-1">
+                        <label class="text-white fw-bold fs-5 py-1">Status</label>
+                        <select class="btn btn-secondary bg-white text-dark border-0 dropdown-toggle col-12 py-2"
+                            name="status" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <option value="true">List</option>
+                            <option value="false">Unlist</option>
+                        </select>
+
+                    </div>
+                    <div class="measurements row col-12">
+                        <label class="text-center text-white fw-bold fs-5 py-1">Measurements</label>
+                        <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
+                            <label for="width" class="text-white fw-bold fs-6 py-1">Width (cm)</label>
+                            <input type="Number" name="width" id="width" class="rounded border-0 py-2 px-2"
+                                placeholder="Width" value="<%-product.measurements.width%>" required>
+                        </div>
+                        <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
+                            <label for="height" class="text-white fw-bold fs-6 py-1">Height (cm)</label>
+                            <input type="Number" name="height" id="height" class="rounded border-0 py-2 px-2"
+                                placeholder="Height" value="<%-product.measurements.height%>" required>
+                        </div>
+                        <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
+                            <label for="depth" class="text-white fw-bold fs-6 py-1">Depth (cm)</label>
+                            <input type="Number" name="depth" id="depth" class="rounded border-0 py-2 px-2"
+                                placeholder="Depth" value="<%-product.measurements.depth%>">
+                        </div>
+                        <div class="input-container d-flex flex-column col-md-3 col-6 py-1">
+                            <label for="max_load" class="text-white fw-bold fs-6 py-1">Max Load (kg)</label>
+                            <input type="Number" name="max_load" id="max_load" class="rounded border-0 py-2 px-2"
+                                placeholder="Max Load" value="<%-product.measurements.max_load%>" required>
+                        </div>
+                    </div>
+                    <div class="input-container d-flex flex-column col-md-6 col-12 py-1">
+                        <label for="price" class="text-white fw-bold fs-5 py-1">Price</label>
+                        <input type="Number" name="price" id="price" class="rounded border-0 py-2 px-2"
+                            placeholder="Price" value="<%-product.price%>" required>
+                    </div>
+                    <div class="input-container d-flex flex-column col-md-6 col-12 py-1">
+                        <label for="sale_price" class="text-white fw-bold fs-5 py-1">Sale Price</label>
+                        <input type="Number" name="sale_price" id="sale_price" class="rounded border-0 py-2 px-2"
+                            placeholder="Sale Price" value="<%-product.sale_price%>" required>
+                    </div>
+
+
+                </div>
+                <%if (typeof err!="undefined" && err) {%>
+                    <p class="text-danger text-center">
+                        <%=err%>
+                    </p>
+                    <%}%>
+                        <div class="d-flex flex-row justify-content-center align-items-center col-12 py-2">
+                            <button class="btn bg-white border-0 rounded mx-1 px-4 py-2"><a
+                                    href="/admin/product-management"
+                                    class="text-dark text-decoration-none">Cancel</a></button>
+                            <button class="btn bg-success border-0 rounded mx-1 px-4 py-2 text-white"
+                                type="submit">Update Product</button>
+                        </div>
+            </form>
+        </section>
+        <script>
+            function validateImage(evt, id) {
+
+                const preview_main = document.getElementById(`preview-main${id}`);
+                const product_main = document.getElementById(`product-main${id}`);
+                const file_name = product_main.value;
+
+                let dot = file_name.lastIndexOf(".") + 1;
+                let ext = file_name.substr(dot, file_name.length)
+                console.log(ext);
+                if (ext != "png" && ext != "jpg" && ext != "jpeg") {
+                    document.getElementById(`error-msg${id}`).innerText = "Only png,jpeg,jpg images are supported";
+                } else {
+                    document.querySelector(`.preview-con${id}`).classList.remove('d-none');
+                    document.querySelector(`.preview-con${id}`).classList.add('d-flex');
+                    preview_main.src = URL.createObjectURL(evt.target.files[0]);
+                }
+            }
+
+        </script>
+        <%- include('includes/admin/footer') %>

@@ -7,7 +7,7 @@ const { createCategory, uploadAndCreate, isCategoryExist, deleteCategory, editCa
 const upload = require('../services/multer');
 const { createSubCategory, getDetails, deleteSubCategory, editSubCategory, renderSubCategory , editSubCategoryPage } = require('../controllers/admin/sub-category-management');
 const { createBanner, fetchAllBanners, bannerStatus, deleteBanner, editBanner } = require('../controllers/admin/banner-management');
-const { createProduct, viewProduct, updateStatus, editProductPage, deleteProduct, allCategories, newPrdctPage, allSubcategories } = require('../controllers/admin/product-management');
+const { createProduct, viewProduct, updateStatus, editProductPage, deleteProduct, allCategories, newPrdctPage, allSubcategories, updateProduct } = require('../controllers/admin/product-management');
 const { usersManagement } = require('../controllers/admin/user-management');
 const { authSession, sessionAdmin, sessionDestroyAdmin } = require('../middlewares/admin/admin-session');
 const { orderMngmtPage } = require('../controllers/admin/order-management');
@@ -62,11 +62,11 @@ router.put('/user-management/unblock/:id',userStatus);
 router.put('/coupon-unlist/:id',listUnlistCoupon(false));
 router.put('/coupon-list/:id',listUnlistCoupon(true));
 router.put('/update-category/:id',upload.single("category_image"),updateCategory);
-router.put('/update-subcategory/:id/:parent',upload.single("fileup"),editSubCategory);
+router.put('/update-subcategory/:id/:parent',upload.single("category-image"),editSubCategory);
 router.put('/banner-status/:id/',bannerStatus);
 router.put('/update-banner/:id',upload.single("banner_image"),editBanner)
 router.put('/product-status/:id',updateStatus);
-
+router.put('/update-product/:id',upload.array("product-image",3),updateProduct);
 
 
 router.delete('/user-management/delete/:id',deleteUser);

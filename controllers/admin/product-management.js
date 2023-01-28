@@ -60,6 +60,7 @@ module.exports = {
       res.send("cant create product");
     }
   },
+  // getting all products
   fetchAllProduct: async (req, res) => {
     try {
       let products = await Product.find({}).populate([
@@ -73,21 +74,23 @@ module.exports = {
       res.send("cant fetch products");
     }
   },
+  // view single product
   viewProduct: async (req, res) => {
     let productId = req.query.id;
     try {
       let product = await Product.findById(productId).populate([
         "parent_category",
       ]);
+      
       if (product) {
-        console.log(product);
-        res.render("view-product", { product: product });
+        res.render("view-product", { product: product});
       }
     } catch (err) {
       console.log(err);
       res.send("can't fetch product try after sometimes");
     }
   },
+  //list or unlist products
   updateStatus: async (req, res) => {
     let status = req.query.status;
     let productId = req.params.id;
@@ -102,16 +105,53 @@ module.exports = {
       res.send("can't update the status");
     }
   },
+  // rendering edit product page
   editProductPage:async(req,res)=>{
     let productId = req.query.id;
     try{
-        let response = await Product.findOne({_id:productId}).populate(['parent_category','sub_category']);
+        let response = await Product.findOne({_id:productId}).populate(['parent_category']);
+        let parent_category = await response.parent_category.find((ele)=>{
+          return ele.category_name;
+        })
         if(response) res.render('edit-product',{product:response});
     }catch(err){
         console.log(err)
         res.send("Unable to fetch product");
     }
   },
+  // updating product details
+  updateProduct:async(req,res)=>{
+      let prodId = req.params.id;
+      try{
+          if(req.file!==undefined){
+            let imageFiles = req.files;
+            let response = await multipleUpload(imageFiles);
+            await Product.findOneAndUpdate({_id:prodId},{$set:{"images":response}});
+          }
+        // fetching existing images array
+        let productdb = await Product.findOne({_id:prodId});
+        console.log(productdb);
+        let dbimages = await productdb.images;
+        let product = {
+          product_name : req.body.product_name,
+          description : req.body.product_description,
+          stock : req.body.stock,
+          status : req.body.status,
+          measurements : {
+            width : req.body.width,
+            height : req.body.height,
+            depth : req.body.depth,
+            max_load : req.body.max_load,
+          },
+          images : dbimages,
+        }
+        let dbProduct = await Product.findOneAndUpdate({_id:prodId},product);
+        res.redirect('/admin/product-management');
+      }catch(err){
+        console.log(err);
+      }
+  },
+  // deleting product
   deleteProduct:async(req,res)=>{
     let productId = req.params.id;
     try{
