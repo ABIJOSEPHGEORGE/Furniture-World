@@ -22,6 +22,13 @@ const Category = mongoose.model('Category',new mongoose.Schema({
     },
     last_updated:{
         type:Date,
+    },
+    // sub_category: [{ 
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "SubCategory"
+    //  }],
+    sub_category:{
+        type:Array,
     }
 }))
 

@@ -1,0 +1,85 @@
+<%- include('includes/admin/head') %>
+<%- include('includes/admin/header') %>
+  
+    <section class="container w-100 mt-3 mx-0 p-0">
+        <!-- <form action="/admin/coupon-management" method="post" class="d-flex flex-column justify-content-center align-items-center">
+            <div class="border-bottom d-flex flex-row align-items-center col-10 bg-dark rounded-pill px-3">
+              <span class="material-symbols-outlined col-1">search</span>
+              <input type="search" class="col-9 bg-transparent border-0 text-white" placeholder="Search coupon" name="search_key">
+              <button class="btn col-2" type="submit">Search</button>
+            </div>
+          </form> -->
+
+         <% if(banners.length!=0){%>
+            <table class="table table-striped table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">SL. NO</th>
+                    <th scope="col">Banner Image</th>
+                    <th scope="col">Banner Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" class="text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% banners.forEach((banner,index)=>{%>
+                  <tr>
+                    <td scope="row"><%-index+1%></td>
+                    <td class="w-25">
+                      <img src="<%-banner.banner_image%>" alt="" srcset="" class="w-100">
+                    </td>
+                    <td><%-banner.title%></td>
+                    <td><%-banner.description%></td>
+                    <% if(banner.status===true){ %>
+                    <td><span class="badge badge-pill bg-success px-2 rounded-pill">Active</span></td>
+                    <%}else{%>
+                    <td><span class="badge badge-pill bg-danger px-2 rounded-pill">Inactive</span></td>
+                    <%}%>
+                    <td >
+                        <div class="d-flex flex-row justify-content-evenly align-items-center">
+                            
+                          <div>
+                            <a href="edit-banner?id=<%-banner._id%>" class="d-flex flex-column justify-content-center align-items-center px-2">
+                                <span class="material-symbols-outlined text-white">edit</span>
+                                <p class="text-white">Edit</p>
+                            </a>
+                          </div>
+                          <div>
+                            <% if(banner.status==true){ %>
+                            <a href="/admin/banner-status/<%-banner._id%>?status=false&_method=PUT" class="d-flex flex-column justify-content-center align-items-center px-2">
+                                <span class="material-symbols-outlined text-success text-danger">toggle_off</span>
+                                <p class="text-white">Unlist</p>
+                            </a>
+                            <% } else {%>
+                            <a href="/admin/banner-status/<%-banner._id%>?status=true&_method=PUT" class="d-flex flex-column justify-content-center align-items-center px-2">
+                                <span class="material-symbols-outlined text-success text-success">toggle_on</span>
+                                <p class="text-white">List</p>
+                            </a>
+                            <%}%>
+                          </div>
+                          <div>
+                            <a href="/admin/delete-banner/<%-banner._id%>?public_id=<%-banner.cloudinary_id%>&_method=DELETE" class="d-flex flex-column justify-content-center align-items-center px-2">
+                                <span class="material-symbols-outlined text-danger">Delete</span>
+                                <p class="text-white">Delete</p>
+                            </a>
+                          </div>
+                        </div>
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+              <% } %>
+              
+              <% if(banners.length==0){ %>
+              <div class="w-100 d-flex flex-column justify-content-center align-items-center">
+                <img src="/admin/img/Empty-bro.svg" class="w-25 h-25" alt="">
+                <p class="text-white">No banners found</p>
+                <a href="/admin/add-banner" class="text-white text-decoration-underline">Add new banner</a>
+              </div>
+             <%}%>
+
+    </section>
+
+<%- include('includes/admin/footer') %>

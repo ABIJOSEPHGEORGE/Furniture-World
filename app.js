@@ -8,7 +8,8 @@ const dotenv = require('dotenv').config();
 const nocache = require('nocache');
 const session = require('express-session');
 const multer = require('multer');
-const onHeaders = require('on-headers');
+const cors = require('cors');
+
 
 
 //importing all routes
@@ -19,6 +20,9 @@ var adminRoute = require('./routes/admin-route');
 
 //connecting to database
 const dbConnection = require('./database/connection');
+const Category = require('./models/category-schema');
+const { getCartCount } = require('./controllers/users/cart');
+const User = require('./models/users-schema');
 dbConnection.connectDB();
 
 
@@ -27,11 +31,13 @@ const app = express();
 app.locals.email;
 app.locals.user;
 
+
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(logger('dev'));
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors())
 
 //session cookie and nocache
 app.use(nocache());
@@ -44,6 +50,22 @@ app.use(session({
 }));
 app.disable('view cache');
 
+
+app.use(async(req,res,next)=>{
+  if(req.session.user){
+    let userEmail = req.session.user;
+    next()
+  }else{
+    next()
+  }
+ 
+})
+
+app.use(async(req,res,next)=>{
+  res.locals.allParentCategory = await Category.find({});
+  res.locals.session = req.session.user;
+  next()
+})
 
 
 // view engine setup
@@ -61,7 +83,9 @@ app.use('/admin',adminRoute);
 app.use(function(req, res, next) {
     next(createError(404));
   });
-  
+
+
+
 // error handler
 app.use(function(err, req, res, next) {
 // set locals, only providing error in development
@@ -70,7 +94,7 @@ res.locals.error = req.app.get('env') === 'development' ? err : {};
 
 // render the error page
 res.status(err.status || 500);
-res.render('error');
+res.render('notfound');
 });
 
 const port = process.env.PORT || 3001;

@@ -24,6 +24,7 @@ module.exports = {
     },
     //upload image to cloudinary
     uploadAndCreate:(req,res)=>{
+       
         //uploading image to cloudinary
             uploadImage(req.file.path)
             .then(async (response)=>{
@@ -71,7 +72,6 @@ module.exports = {
     //update category
     updateCategory:async(req,res)=>{
         let dbCategory = await Category.findOne({_id:req.params.id});
-        console.log(req.file);
         if(req.file!==undefined){
             overwriteImage(req.file.path,dbCategory.cloudinary_id)
             .catch((err)=>console.log(err))

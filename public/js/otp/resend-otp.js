@@ -1,7 +1,7 @@
 var resend_otp = document.getElementById('resend-otp');
 var success_otp = document.getElementById('otp-success');
 var verify_btn = document.getElementById('verify-btn');
-var timeLeft = 10;
+var timeLeft = 60;
 
 
     var otpTimer = setInterval(()=>{

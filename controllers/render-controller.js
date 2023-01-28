@@ -1,3 +1,4 @@
+const Banner = require("../models/banner");
 
 module.exports = {
     signupPage:(req,res)=>{
@@ -15,5 +16,10 @@ module.exports = {
     resetPassPage:(req,res)=>{
         req.app.locals.email = req.body.email;
         res.render('reset-password');
+    },
+    homePage:(req,res)=>{
+        Banner.find({}).then((banners)=>{
+            res.render('home',{banners:banners})
+        })
     }
 }

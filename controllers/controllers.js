@@ -1,6 +1,6 @@
 const User = require("../models/users-schema");
 const bcrypt = require('bcrypt');
-
+const Category = require('../models/category-schema');
 
 module.exports = {
     checkEmail:async(email)=>{
@@ -40,6 +40,7 @@ module.exports = {
         try{
             user.password = await bcrypt.hash(user.password,salt);
             await User.create(user);
+            req.session.user = user.email;
             res.redirect('/');
         }catch(err){
             console.log(err);
@@ -53,6 +54,7 @@ module.exports = {
         }catch(err){
             console.log(err);
         }
-    }
+    },
+
 
 }

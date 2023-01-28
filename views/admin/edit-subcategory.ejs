@@ -1,0 +1,95 @@
+<%- include('includes/admin/head') %>
+    <%- include('includes/admin/header') %>
+
+        <section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
+            <div class="bg-black">
+                <p class="text-white px-3 fw-bold py-3">Sub Category / Edit Sub Category</p>
+            </div>
+            <div class="form-container d-flex flex-column justify-content-center align-items-center">
+                <p class="text-center text-white fw-bold fs-3">Edit Sub Category</p>
+            </div>
+            <form action="/admin/update-subcategory/<%-subcat._id%>/<%-subcat.parent_category%>?_method=PUT" method="post" class="row px-4"
+                enctype="multipart/form-data">
+                <div class="col-12">
+                    <div class="preview-img p-3 text-center d-block h-100" id="img-preview">
+                        <div class="img-container">
+                            <img src="<%-subcat.sub_category_image%>" class="w-50" alt="" srcset="">
+                        </div>
+                        <a href="#" class="text-white text-decoration-none py-2">
+                            <div class="d-flex flex-row text-center" id="change-img">
+                                Change Image
+                                <span class="material-symbols-outlined">
+                                    edit
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="container d-none color m-0" id="choose-img">
+                        
+                        <div class="col-md-offset-3 center m-0">
+				<div class="btn-container">
+					<!--the three icons: default, ok file (img), error file (not an img)-->
+					<h1 class="imgupload"><i class="fa fa-file-image-o"></i></h1>
+					<h1 class="imgupload ok"><i class="fa fa-check"></i></h1>
+					<h1 class="imgupload stop"><i class="fa fa-times"></i></h1>
+					<!--this field changes dinamically displaying the filename we are trying to upload-->
+					<p id="namefile">Only pics allowed! (jpg,jpeg,bmp,png)</p>
+					
+                        <input type="file" value="" name="fileup" id="fileup">
+            
+				</div>
+                <div class="d-flex justify-content-center align-items-center" id="upload-cancel">
+                    <p class="text-white fw-bold m-0">Cancel</p>
+                    <span class="material-symbols-outlined text-white">
+                        close
+                    </span>
+                </div>
+			</div>
+		</div>
+
+                      
+                     
+                    
+                </div>
+                <div class="d-flex flex-column align-items-center col-12 px-5">
+                    <div class="input-container d-flex flex-column col-12 py-1">
+                        <label for="category_name" class="text-white fw-bold fs-5 py-1">Category Name</label>
+                        <input type="text" name="category_name" id="category_name" class="rounded border-0 py-2 px-2"
+                            placeholder="Category Name" value="<%-subcat.sub_category_name%>" required>
+                    </div>
+                    <div class="input-container d-flex flex-column col-12 py-1">
+                        <label for="category_description" class="text-white fw-bold fs-5 py-1">Description</label>
+                        <input type="text" name="category_description" id="category_description"
+                            class="rounded border-0 py-2 px-2" placeholder="Category Description"
+                            value="<%-subcat.description%>" required>
+                    </div>
+
+
+
+                    <%if (typeof err!="undefined" && err) {%>
+                        <p class="text-danger text-center">
+                            <%=err%>
+                        </p>
+                        <%}%>
+
+                </div>
+
+
+                <%if (typeof err!="undefined" && err) {%>
+                    <p class="text-danger text-center">
+                        <%=err%>
+                    </p>
+                    <%}%>
+                        <div class="d-flex flex-row justify-content-center align-items-center col-12 py-2">
+                            <button class="btn bg-white border-0 rounded mx-1 px-4 py-2"><a
+                                    href="/admin/sub-category-management"
+                                    class="text-dark text-decoration-none">Cancel</a></button>
+                            <button class="btn bg-success border-0 rounded mx-1 px-4 py-2 text-white"
+                                type="submit" id="update-btn">Update Category</button>
+                        </div>
+                        </div>
+
+            </form>
+        </section>
+        <script src="/admin/js/image-validation.js"></script>
+        <%- include('includes/admin/footer') %>

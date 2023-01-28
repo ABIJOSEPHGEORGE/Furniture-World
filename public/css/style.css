@@ -6,6 +6,23 @@
   background-image: linear-gradient(16deg, #ff005a 0%, #ff5d2d 64%, #ffba00 100%);
 }
 
+#cart-count{
+  background-color: #f13d80;
+  color:white;
+}
+.main_menu .cart i:after {
+  position: absolute;
+  border-radius: 50%;
+  background-color: #f13d80;
+  width: 14px;
+  height: 14px;
+  right: -8px;
+  top: -8px;
+  text-align: center;
+  line-height: 15px;
+  font-size: 10px;
+  color: #fff;
+}
 /* line 10, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_extends.scss */
 .form-contact .form-group .btn_1 {
   background-image: linear-gradient(to left, #fff 0%, #fff 51%, #fff 100%);
@@ -44,7 +61,7 @@ input:focus {
 
 /* line 24, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_common.scss */
 .section_padding {
-  padding: 140px 0px;
+  padding: 140px 0px 20px 0px;
 }
 
 #forget_pass{
@@ -2254,20 +2271,7 @@ ul {
 }
 
 /* line 130, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
-.main_menu .cart i:after {
-  position: absolute;
-  border-radius: 50%;
-  background-color: #f13d80;
-  width: 14px;
-  height: 14px;
-  right: -8px;
-  top: -8px;
-  content: "5";
-  text-align: center;
-  line-height: 15px;
-  font-size: 10px;
-  color: #fff;
-}
+
 
 /* line 151, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
 .menu_fixed {
@@ -7785,3 +7789,8 @@ h6 {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+
+
+
+

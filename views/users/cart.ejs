@@ -1,0 +1,170 @@
+<%- include('includes/users/head') %>
+<%- include('includes/users/header') %>
+  <!--================Home Banner Area =================-->
+  <!-- breadcrumb start-->
+  <section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="breadcrumb_iner">
+            <div class="breadcrumb_iner_item">
+              <h2>Cart Products</h2>
+              <p>Home <span>-</span>Cart Products</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- breadcrumb start-->
+  <% if(products.length==0 || typeof products=="undefined"){ %>
+      <div class="image-container w-100 d-flex justify-content-center flex-column align-items-center">
+        <img src="/img/empty_cart.jpg" class="w-25" alt="">
+        <h4 class="text-center">Cart is empty</h4>
+      </div>
+  <%}else{%>
+
+
+
+  <!--================Cart Area =================-->
+  <section class="cart_area padding_top">
+    <div class="container">
+      <div class="cart_inner">
+        <div class="table-responsive">
+          <table class="table" id="products">
+            <thead>
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%products.forEach((item,index)=>{%>
+                <tr>
+                  <td>
+                    <div class="media">
+                      <div class="d-flex w-25">
+                        <img src="<%-item.item.images[0].URL%>"  class="w-100" alt="" />
+                      </div>
+                      <div class="media-body">
+                        <p><%-item.item.product_name%></p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <h5>₹<%-item.item.sale_price%></h5>
+                  </td>
+                  
+                  <td>
+                    <div class="product_count">
+                      <% if(item.qty>=2){ %>
+                        <a href="/users/update-qty/<%-item.item._id%>/dec?_method=PUT" class="input-number-decrement" id="decrement" > <i class="ti-angle-down"></i></a>
+                      <%}else if(item.qty<=1){%>
+                        <a href="#" onclick="confirmDelete('<%-item.item._id%>')" class="input-number-decrement" id="decrement" > <i class="ti-angle-down"></i></a>
+                      <%}%>
+                      <input class="input-number bg-white" id="input-number" type="text" value="<%-item.qty%>" min="1" max="10" disabled>
+                      <a href="/users/update-qty/<%-item.item._id%>/inc?_method=PUT" class="input-number-increment" id="increment" > <i class="ti-angle-up"></i></span>
+                    </div>
+                  </td>
+                  <td>
+                    <h5>₹<%-item.totalPrice%></h5>
+                  </td>
+                  <td>
+                    <h5 onclick="confirmDelete('<%-item.item._id%>')" style="cursor: pointer;">Remove</h5>
+                  </td>
+                </tr>
+              <%})%>
+              
+              
+             
+              <tr>
+                <td></td>
+                <td></td>
+                <td>
+                  <h5>Subtotal</h5>
+                </td>
+                <td>
+                  <h5>₹<%-subTotal%></h5>
+                </td>
+              </tr>
+              <!-- <tr class="shipping_area">
+                <td></td>
+                <td></td>
+                <td>
+                  <h5>Shipping</h5>
+                </td>
+                <td>
+                  <div class="shipping_box">
+                    <ul class="list">
+                      <li>
+                        <a href="#">Flat Rate: $5.00</a>
+                      </li>
+                      <li>
+                        <a href="#">Free Shipping</a>
+                      </li>
+                      <li>
+                        <a href="#">Flat Rate: $10.00</a>
+                      </li>
+                      <li class="active">
+                        <a href="#">Local Delivery: $2.00</a>
+                      </li>
+                    </ul>
+                    <h6>
+                      Calculate Shipping
+                      <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </h6>
+                    <select class="shipping_select">
+                      <option value="1">Bangladesh</option>
+                      <option value="2">India</option>
+                      <option value="4">Pakistan</option>
+                    </select>
+                    <select class="shipping_select section_bg">
+                      <option value="1">Select a State</option>
+                      <option value="2">Select a State</option>
+                      <option value="4">Select a State</option>
+                    </select>
+                    <input type="text" placeholder="Postcode/Zipcode" />
+                    <a class="btn_1" href="#">Update Details</a>
+                  </div>
+                </td>
+              </tr> -->
+            </tbody>
+          </table>
+          <div class="checkout_btn_inner float-right">
+            <a class="btn_1" href="#">Continue Shopping</a>
+            <a class="btn_1 checkout_btn_1" href="#">Proceed to checkout</a>
+          </div>
+        </div>
+      </div>
+  </section>
+
+  <%}%>
+  
+  <div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm remove</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-icon">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to remove the item ?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="proceed-btn"></button>
+        <button type="button" class="btn btn-secondary" id="close-btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <!--================End Cart Area =================-->
+  <%- include('includes/users/footer') %>

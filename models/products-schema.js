@@ -7,13 +7,12 @@ const Product = mongoose.model('Product',new mongoose.Schema({
         required:true,
         unique:true,
     },
-    category:{
-        type:String,
-        required:true,
-    },
+    parent_category:[{
+        type:mongoose.Types.ObjectId,
+        ref: 'Category',
+    }],
     sub_category:{
         type:String,
-        required:true,
     },
     description:{
         type:String,
@@ -26,23 +25,18 @@ const Product = mongoose.model('Product',new mongoose.Schema({
     measurements:{
         type:Object,
     },
-    tags:{
-        type:Array,
-        required:true,
-    },
     last_updated_user:{
         type:ObjectId,
     },
     last_updated:{
         type:Date,
-        required:true,
     },
     status:{
         type:Boolean,
+        default:true,
     },
     images:{
         type:Array,
-        required:true,
     },
     price:{
         type:Number,

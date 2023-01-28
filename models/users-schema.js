@@ -51,11 +51,14 @@ const User = mongoose.model('Users',new mongoose.Schema({
         type:Date,
         required:true,
     },
-    cart:{
-        type:Object,
-    },
+    cart:[
+        {
+            productId:mongoose.Types.ObjectId,
+            quantity:Number,
+        },
+    ],
     wishlist:{
-        type:Object,
+        type:Array,
     },
 },
 {timestamps:true}

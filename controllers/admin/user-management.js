@@ -1,9 +1,15 @@
 const User = require("../../models/users-schema")
 
 module.exports = {
-    fetchAllUsers:async()=>{
-        let allUsers = await User.find({});
-        return allUsers;
+    //fetching all users data 
+    usersManagement:async(req,res)=>{
+        try{
+            let allUsers = await User.find({});
+            if(allUsers) res.render('user-management',{users:allUsers});
+        }catch(err){
+            console.log(err);
+            res.status(503).send("can't fetch users try after sometimes");
+        }
     },
     updateStatus:async(id,status)=>{
        let update = await User.findByIdAndUpdate(id,{status:status});
