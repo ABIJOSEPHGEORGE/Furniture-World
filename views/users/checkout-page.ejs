@@ -340,9 +340,8 @@
             title: 'Oops...',
             text: 'Please select or add new address',
           })
-        }
-
-        if (data.payment === "online" && !address_block.classList.contains('d-none')) {
+          
+        }else if (data.payment === "online" && !address_block.classList.contains('d-none')) {
           // getting the order id
           fetch(`https://www.furnitureworld.site/users/checkout/create-order/${sub_total_amount}`, {
             method: "POST",
