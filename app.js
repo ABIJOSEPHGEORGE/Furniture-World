@@ -88,5 +88,5 @@ app.use(function (err, req, res, next) {
   res.render("notfound");
 });
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 8000;
 app.listen(port);
