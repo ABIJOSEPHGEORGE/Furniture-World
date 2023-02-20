@@ -1,6 +1,5 @@
 const multer = require('multer');
 const path = require('path');
-const { createBrotliCompress } = require('zlib');
 
 module.exports = multer({
     storage: multer.diskStorage({}),

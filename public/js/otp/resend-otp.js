@@ -19,3 +19,8 @@ var timeLeft = 60;
     verify_btn.addEventListener('click',()=>{
         success_otp.style = "visibility:hidden";
     })
+
+    // Handling the Confirm form resubmission
+		if ( window.history.replaceState ) {
+			window.history.replaceState( null, null, window.location.href );
+		}

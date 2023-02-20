@@ -108,19 +108,20 @@
                 <div class="row col-md-6 col-12 px-3">
 
                     <div class="dropdown col-6 py-1">
-                        <label class="text-white fw-bold fs-5 py-1">Parent Category</label>
-                        <%product.parent_category.forEach((ele)=>{%>
-                            <input type="text" value="<%-ele.category_name%>" class="rounded border-0 py-2 px-2"
-                                placeholder="parent category" required>
-                            <%})%>
+                        <select name="parent_category"
+                            class="btn btn-secondary bg-white text-dark border-0 dropdown-toggle col-12"
+                            id="parent_category">
+
+                        </select>
+
 
                     </div>
                     <div class="dropdown col-6 py-1">
-                        <label class="text-white fw-bold fs-5 py-1">Choose Sub Category</label>
+                        <select name="sub_category"
+                            class="btn btn-secondary bg-white text-dark border-0 dropdown-toggle col-12"
+                            id="sub_category">
 
-                        <input type="text" value="<%-product.sub_category%>" class="rounded border-0 py-2 px-2"
-                            placeholder="parent category" required>
-
+                        </select>
 
                     </div>
 
@@ -190,6 +191,8 @@
             </form>
         </section>
         <script>
+            const parent_category = document.getElementById('parent_category');
+            const sub_category = document.getElementById('sub_category');
             function validateImage(evt, id) {
 
                 const preview_main = document.getElementById(`preview-main${id}`);
@@ -198,7 +201,7 @@
 
                 let dot = file_name.lastIndexOf(".") + 1;
                 let ext = file_name.substr(dot, file_name.length)
-                console.log(ext);
+
                 if (ext != "png" && ext != "jpg" && ext != "jpeg") {
                     document.getElementById(`error-msg${id}`).innerText = "Only png,jpeg,jpg images are supported";
                 } else {
@@ -207,6 +210,57 @@
                     preview_main.src = URL.createObjectURL(evt.target.files[0]);
                 }
             }
+
+            parentCategories()
+            // fetching categories and sub categories
+            function parentCategories() {
+                fetch(`http://localhost:3000/admin/fetch-categories/<%-product._id%>`, {
+                    method: "POST"
+                })
+                    .then((res) => {
+                        return res.json()
+                    })
+                    .then((res) => {
+                        res.categories.forEach((cat) => {
+                            let option = document.createElement('option');
+                            option.innerHTML = cat.category_name.charAt(0).toUpperCase() + cat.category_name.substring(1).replaceAll("-", " ")
+                            option.value = cat.category_name;
+                            // option.setAttribute("onclick",fetchSubcategory(cat._id))
+                            if (res.default_category === cat.category_name) {
+                                option.setAttribute("selected", "selected");
+                            }
+                            parent_category.insertAdjacentElement("beforeend", option)
+                        })
+                        sub_category.innerHTML = ""
+                        let sub_option = document.createElement('option');
+                        sub_option.innerHTML = res.default_sub_category.charAt(0).toUpperCase() + res.default_sub_category.substring(1).replaceAll("-", " ");
+                        sub_option.value = res.default_sub_category;
+                        sub_category.insertAdjacentElement("beforeend", sub_option);
+                    })
+            }
+
+            fetch('http://localhost:3000/admin/all-subcategories')
+                .then((res) => {
+                    return res.json()
+                })
+                .then((res) => {
+                    parent_category.onchange = () => {
+                        sub_category.options.length = 0;
+                        let defaultOption = document.createElement('option');
+                        defaultOption.text = "select"
+                        sub_category.append(defaultOption)
+                        res.forEach((ele) => {
+                            ele.forEach((sub) => {
+                                if (parent_category.value == sub.parent_category_name) {
+                                    let suboptions = document.createElement('option');
+                                    suboptions.text = sub.sub_category_name.charAt(0).toUpperCase() + sub.sub_category_name.substring(1).replaceAll("-", " ");
+                                    sub_category.append(suboptions);
+                                }
+                            })
+                        })
+                    }
+                })
+
 
         </script>
         <%- include('includes/admin/footer') %>

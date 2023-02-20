@@ -16,6 +16,9 @@ const Banner = mongoose.model('Banner',new mongoose.Schema({
     cloudinary_id:{
         type:String,
     },
+    action_link:{
+        type:String,
+    },
     status:{
         type:Boolean,
         default:true,

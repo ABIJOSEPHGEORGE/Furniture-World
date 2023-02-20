@@ -312,16 +312,7 @@
     makeTimer();
   }, 1000);
 
-  // click counter js
-
-
-  // var a = 0;
-  // $('.increase').on('click', function(){
-     
-    
-
-  //   console.log(  $(this).innerHTML='Product Count: '+ a++ );
-  // });
+  
 
  var product_overview = $('#vertical');
  if(product_overview.length){
@@ -358,3 +349,9 @@
 
 
 }(jQuery));
+
+
+// Handling the Confirm form resubmission
+		if ( window.history.replaceState ) {
+			window.history.replaceState( null, null, window.location.href );
+		}

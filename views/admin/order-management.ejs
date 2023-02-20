@@ -1,31 +1,161 @@
 <%- include('includes/admin/head') %>
-<%- include('includes/admin/header') %>
-<section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
-  <!-- <form action="/admin/user-management" method="post" class="d-flex flex-column justify-content-center align-items-center">
-    <div class="border-bottom d-flex flex-row align-items-center col-10 bg-dark rounded-pill px-3">
-      <span class="material-symbols-outlined col-1">search</span>
-      <input type="search" class="col-9 bg-transparent border-0 text-white" placeholder="Search users" name="search_key">
-      <button class="btn col-2" type="submit">Search</button>
-    </div>
-  </form> -->
-  
-    <table class="table table-striped table-dark">
+  <%- include('includes/admin/header') %>
+    <section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
+
+
+      <table class="table table-striped table-dark">
         <thead>
           <tr>
             <th scope="col">Order Id</th>
+            <th scope="col">User Email</th>
             <th scope="col">Order Date</th>
-            <th scope="col">Shipping Address</th>
+            <th scope="col">Payment Method</th>
             <th scope="col">Order Amount</th>
-            <th scope="col">Status</th>
+            <th scope="col">Order Status</th>
             <th scope="col" class="text-center">Action</th>
           </tr>
         </thead>
-        <tbody>
-            
-         
+        <tbody id="order-tbody">
+
+
+
+
         </tbody>
       </table>
-     
-</section>
 
-<%- include('includes/admin/footer') %>
+    </section>
+
+    <script>
+      const order_tbody = document.getElementById('order-tbody');
+
+      fetchingOrders()
+      function fetchingOrders() {
+        fetch("http://localhost:3000/admin/order-management", {
+          method: "POST"
+        })
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+
+            res.forEach((order) => {
+
+              let single_order = `
+      <tr>
+              <td>${order._id}</td>
+              <td>${order.userId.email}</td>
+              <td style="font-size:0.8rem">${order.order_date.slice(0, 10)}</td>
+              <td>${order.payment_method}</td>
+              <td>₹${order.bill_amount}</td>
+              <td><span class="badge badge-pill bg-secondary px-2 rounded-pill" id="order-status-${order._id}">${order.status.replaceAll("_", " ").toUpperCase()}</span></td>
+              <td>
+                <div class="d-flex align-items-center justify-content-between">
+                  <a href="/admin/invoice?id=${order._id}" class="d-flex flex-column align-items-center justify-content-center cup text-white px-2">
+                    <span class="material-symbols-outlined">
+                      visibility
+                      </span>
+                      <p style="font-size:12px;" class="text-center">View Order</p>
+                  </a>
+
+                  <div class="d-flex flex-column align-items-center justify-content-center cup text-white px-2" onclick="updateStatus('${order._id}')">
+                    <span class="material-symbols-outlined">
+                    edit_square
+                    </span>
+                      <p style="font-size:12px;" class="text-center">Update Status</p>
+                  </div>
+
+                </div>
+                
+              </td>
+
+            </tr>`
+              order_tbody.insertAdjacentHTML("beforeend", single_order);
+              const order_status = document.getElementById(`order-status-${order._id}`);
+              if (order.status === "pending") {
+                order_status.classList.add('bg-secondary')
+              } else if (order.status === "processing") {
+                order_status.classList.add('bg-warning')
+              } else if (order.status === "shipped") {
+                order_status.classList.add('bg-info')
+              } else if (order.status === "out_for_delivery") {
+                order_status.classList.add('bg-success')
+              } else if (order.status === "delivered") {
+                order_status.classList.add('bg-success')
+              } else if (order.status === "canceled") {
+                order_status.classList.add('bg-danger')
+              } else if (order.status === "return") {
+                order_status.classList.add('bg-danger')
+              }
+
+            })
+
+
+          })
+
+      }
+
+
+      function updateStatus(id) {
+        fetch(`http://localhost:3000/admin/order-status/${id}`, {
+          method: "POST"
+        })
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+
+            let htmlContent = `
+        <select name="status" id="status" style="width: 100%; max-width: 300px; border:none; outline:none">
+        <option value="processing" id="processing">Processing</option>
+        <option value="shipped" id="shipped">Shipped</option>
+        <option value="out_for_delivery" id="out_for_delivery">Out for delivery</option>
+        <option value="delivered" id="delivered">Delivered</option>
+        <option value="canceled" id="canceled">Canceled</option>
+        </select>
+        `
+            let element = res;
+
+            Swal.fire({
+              title: '<strong>Update Order Status</strong>',
+              icon: 'info',
+              html: htmlContent,
+              showCloseButton: true,
+              showCancelButton: true,
+              focusConfirm: false,
+              confirmButtonAriaLabel: 'Update',
+              confirmButtonText: 'Update',
+              didOpen: () => {
+                let value = document.getElementById(element).value
+                if (element == value) {
+                  document.getElementById(element).setAttribute('selected', 'selected')
+                }
+              }
+            })
+              .then((res) => {
+                if (res.isConfirmed == true) {
+                  let status = document.getElementById('status').value;
+                  fetch(`http://localhost:3000/admin/update-order-status/${id}?status=${status}`, {
+                    method: "PUT"
+                  })
+                    .then((res) => {
+                      return res.json()
+                    })
+                    .then((res) => {
+                      if (res == true) {
+                        location.reload()
+                      }
+                    })
+                    .catch((err) => {
+                      location.href = "http://localhost:3000/admin";
+                    })
+                }
+              })
+          })
+
+      }
+
+
+
+    </script>
+
+    <%- include('includes/admin/footer') %>

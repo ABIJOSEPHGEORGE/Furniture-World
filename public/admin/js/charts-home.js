@@ -1,6 +1,146 @@
 "use strict";
 
-document.addEventListener("DOMContentLoaded", function () {
+let orderDelivered = [];
+let orderProcessing = [];
+let orderShipped = [];
+let orderCanceled = [];
+let orderReturned = [];
+let curr = new Date()
+let week = []
+
+fetch("http://localhost:3000/admin/graph-data",{
+    method:"POST"
+})
+.then((res)=>{
+    return res.json()
+})
+.then((res)=>{
+    // PUSHING ALL DELIVERED ORDERS DATA
+    const today = new Date()
+      for (let i = 6; i >= 0; i--) {
+        const day = new Date(today)
+        day.setDate(today.getDate() - i)
+        const dateString = day.toISOString().slice(0,10)
+        week.push(dateString)
+      }
+
+        // GETTING ALL DELIVERY DATA
+        week.forEach((day)=>{
+            res.forEach((order)=>{
+                let orderDate = order.order_date.slice(0,10)
+                if(day==order.order_date.slice(0,10) && order.status === "delivered"){
+                        const index = orderDelivered.findIndex(label => label.date === orderDate);
+                        if(index === -1){
+                            orderDelivered.push({date: day, delivery_count: 1});
+                        } else {
+                            orderDelivered[index].delivery_count++;
+                        }
+                }else if(day!==order.order_date.slice(0,10)){
+                    const index = orderDelivered.findIndex(label => label.date === day);
+                        if(index === -1){
+                            orderDelivered.push({date:day,delivery_count:0})
+                        }
+                }
+                
+            })
+        
+        })
+        
+        // GETTING ORDERS PROCESSING DATA
+        week.forEach((day)=>{
+            res.forEach((order)=>{
+                let orderDate = order.order_date.slice(0,10)
+                if(day==order.order_date.slice(0,10) && order.status === "processing"){
+                        const index = orderProcessing.findIndex(label => label.date === orderDate);
+                        if(index === -1){
+                            orderProcessing.push({date: day, processing_count: 1});
+                        } else {
+                            orderProcessing[index].processing_count++;
+                        }
+                }else if(day!==order.order_date.slice(0,10)){
+                    const index = orderProcessing.findIndex(label => label.date === day);
+                        if(index === -1){
+                            orderProcessing.push({date:day,processing_count:0})
+                        }
+                }
+                
+            })
+        
+        })
+        // GETTING ORDERS SHIPPED DATA
+        week.forEach((day)=>{
+            res.forEach((order)=>{
+                let orderDate = order.order_date.slice(0,10)
+                if(day==order.order_date.slice(0,10) && order.status === "shipped"){
+                        const index = orderShipped.findIndex(label => label.date === orderDate);
+                        if(index === -1){
+                            orderShipped.push({date: day, shipped_count: 1});
+                        } else {
+                            orderShipped[index].shipped_count++;
+                        }
+                }else if(day!==order.order_date.slice(0,10)){
+                    const index = orderShipped.findIndex(label => label.date === day);
+                        if(index === -1){
+                            orderShipped.push({date:day,shipped_count:0})
+                        }
+                }
+                
+            })
+        
+        })
+        // GETTING ORDERS CANCELED DATA
+        week.forEach((day)=>{
+            res.forEach((order)=>{
+                let orderDate = order.order_date.slice(0,10)
+                if(day==order.order_date.slice(0,10) && order.status === "canceled"){
+                        const index = orderCanceled.findIndex(label => label.date === orderDate);
+                        if(index === -1){
+                            orderCanceled.push({date: day, canceled_count: 1});
+                        } else {
+                            orderCanceled[index].canceled_count++;
+                        }
+                }else if(day!==order.order_date.slice(0,10)){
+                    const index = orderCanceled.findIndex(label => label.date === day);
+                        if(index === -1){
+                            orderCanceled.push({date:day,canceled_count:0})
+                        }
+                }
+                
+            })
+        
+        })
+        // GETTING ORDERS RETURNED DATA
+        week.forEach((day)=>{
+            res.forEach((order)=>{
+                let orderDate = order.order_date.slice(0,10)
+                if(day==order.order_date.slice(0,10) && order.status === "returned"){
+                        const index = orderReturned.findIndex(label => label.date === orderDate);
+                        if(index === -1){
+                            orderReturned.push({date: day, returned_count: 1});
+                        } else {
+                            orderReturned[index].returned_count++;
+                        }
+                }else if(day!==order.order_date.slice(0,10)){
+                    const index = orderCanceled.findIndex(label => label.date === day);
+                        if(index === -1){
+                            orderReturned.push({date:day,returned_count:0})
+                        }
+                }
+                
+            })
+        
+        })
+    
+    
+    return  {
+        orderDelivered,
+        orderProcessing,
+        orderShipped,
+        orderCanceled,
+        orderReturned,
+    }
+})
+.then((data)=>{
     Chart.defaults.global.defaultFontColor = "#75787c";
 
     // ------------------------------------------------------- //
@@ -20,15 +160,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     {
                         display: true,
                         gridLines: {
-                            display: false,
+                            display: true,
                         },
                     },
                 ],
                 yAxes: [
                     {
                         ticks: {
-                            max: 60,
-                            min: 10,
+                            max: 100,
+                            min: 0,
                         },
                         display: true,
                         gridLines: {
@@ -41,17 +181,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 display: legendState,
             },
         },
+        
         data: {
-            labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+            
+           
+            labels: week.map((row)=>row),
             datasets: [
                 {
-                    label: "Page Visitors",
+                    label: "Processing",
                     fill: true,
                     lineTension: 0.2,
                     backgroundColor: "transparent",
-                    borderColor: "#864DD9",
-                    pointBorderColor: "#864DD9",
-                    pointHoverBackgroundColor: "#864DD9",
+                    borderColor: "#FFFF00",
+                    pointBorderColor: "#FFFF00",
+                    pointHoverBackgroundColor: "#FFFF00",
                     borderCapStyle: "butt",
                     borderDash: [],
                     borderDashOffset: 0.0,
@@ -61,567 +204,164 @@ document.addEventListener("DOMContentLoaded", function () {
                     pointBorderWidth: 5,
                     pointHoverRadius: 5,
                     pointHoverBorderColor: "#fff",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 0,
-                    data: [20, 27, 20, 35, 30, 40, 33, 25, 39],
-                    spanGaps: false,
-                },
-                {
-                    label: "Page Views",
-                    fill: true,
-                    lineTension: 0.2,
-                    backgroundColor: "transparent",
-                    borderColor: "#EF8C99",
-                    pointBorderColor: "#EF8C99",
-                    pointHoverBackgroundColor: "#EF8C99",
-                    borderCapStyle: "butt",
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: "miter",
-                    borderWidth: 2,
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 5,
-                    pointHoverRadius: 5,
-                    pointHoverBorderColor: "#fff",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 2,
                     pointHitRadius: 10,
-                    data: [25, 17, 28, 25, 33, 27, 30, 33, 27],
+                    data: data.orderProcessing.map((col)=>col.processing_count),
                     spanGaps: false,
                 },
-            ],
-        },
-    });
-
-    // ------------------------------------------------------- //
-    // Bar Chart
-    // ------------------------------------------------------ //
-    const BARCHARTEXMPLE1 = document.getElementById("barChartExample1");
-    var barChartExample = new Chart(BARCHARTEXMPLE1, {
-        type: "bar",
-        options: {
-            scales: {
-                xAxes: [
-                    {
-                        display: false,
-                        gridLines: {
-                            color: "#eee",
-                        },
-                    },
-                ],
-                yAxes: [
-                    {
-                        display: false,
-                        gridLines: {
-                            color: "#eee",
-                        },
-                    },
-                ],
-            },
-        },
-        data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            datasets: [
+                
                 {
-                    label: "Data Set 1",
-                    backgroundColor: [
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                    ],
-                    hoverBackgroundColor: [
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                    ],
-                    borderColor: [
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                    ],
-                    borderWidth: 1,
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                },
-                {
-                    label: "Data Set 2",
-                    backgroundColor: [
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                    ],
-                    hoverBackgroundColor: [
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                    ],
-                    borderColor: [
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                    ],
-                    borderWidth: 1,
-                    data: [35, 40, 60, 47, 88, 27, 30],
-                },
-            ],
-        },
-    });
-
-    // ------------------------------------------------------- //
-    // Line Chart 1
-    // ------------------------------------------------------ //
-    const LINECHART1 = document.getElementById("lineChart1");
-    var myLineChart1 = new Chart(LINECHART1, {
-        type: "line",
-        options: {
-            scales: {
-                xAxes: [
-                    {
-                        display: true,
-                        gridLines: {
-                            display: false,
-                        },
-                    },
-                ],
-                yAxes: [
-                    {
-                        ticks: {
-                            max: 40,
-                            min: 10,
-                            stepSize: 0.1,
-                        },
-                        display: false,
-                        gridLines: {
-                            display: false,
-                        },
-                    },
-                ],
-            },
-            legend: {
-                display: true,
-            },
-        },
-        data: {
-            labels: [
-                "A",
-                "B",
-                "C",
-                "D",
-                "E",
-                "F",
-                "G",
-                "H",
-                "I",
-                "J",
-                "K",
-                "L",
-                "M",
-                "L",
-                "M",
-                "N",
-                "O",
-                "P",
-                "Q",
-                "R",
-                "S",
-                "T",
-            ],
-            datasets: [
-                {
-                    label: "Team Drills",
+                    label: "Shipped",
                     fill: true,
-                    lineTension: 0.3,
+                    lineTension: 0.2,
                     backgroundColor: "transparent",
-                    borderColor: "#EF8C99",
-                    pointBorderColor: "#EF8C99",
-                    pointHoverBackgroundColor: "#EF8C99",
+                    borderColor: "#8F00FF",
+                    pointBorderColor: "#8F00FF",
+                    pointHoverBackgroundColor: "#8F00FF",
                     borderCapStyle: "butt",
                     borderDash: [],
                     borderDashOffset: 0.0,
                     borderJoinStyle: "miter",
                     borderWidth: 2,
-                    pointBackgroundColor: "#EF8C99",
-                    pointBorderWidth: 2,
-                    pointHoverRadius: 4,
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 5,
+                    pointHoverRadius: 5,
                     pointHoverBorderColor: "#fff",
-                    pointHoverBorderWidth: 0,
-                    pointRadius: 1,
-                    pointHitRadius: 0,
-                    data: [20, 21, 25, 22, 24, 18, 20, 23, 19, 22, 25, 19, 24, 27, 22, 17, 20, 17, 20, 26, 22],
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 2,
+                    pointHitRadius: 10,
+                    data: data.orderShipped.map((col)=>col.shipped_count),
                     spanGaps: false,
                 },
                 {
-                    label: "Team Drills",
+                    label: "Delivered",
                     fill: true,
-                    lineTension: 0.3,
+                    lineTension: 0.4,
                     backgroundColor: "transparent",
-                    borderColor: "rgba(238, 139, 152, 0.24)",
-                    pointBorderColor: "rgba(238, 139, 152, 0.24)",
-                    pointHoverBackgroundColor: "rgba(238, 139, 152, 0.24)",
+                    borderColor: "#00FF00",
+                    pointBorderColor: "#00FF00",
+                    pointHoverBackgroundColor: "#00FF00",
                     borderCapStyle: "butt",
                     borderDash: [],
                     borderDashOffset: 0.0,
                     borderJoinStyle: "miter",
                     borderWidth: 2,
-                    pointBackgroundColor: "rgba(238, 139, 152, 0.24)",
-                    pointBorderWidth: 2,
-                    pointHoverRadius: 4,
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 5,
+                    pointHoverRadius: 5,
                     pointHoverBorderColor: "#fff",
-                    pointHoverBorderWidth: 0,
-                    pointRadius: 1,
-                    pointHitRadius: 0,
-                    data: [24, 20, 23, 19, 22, 20, 25, 21, 23, 19, 21, 23, 19, 24, 19, 22, 21, 24, 19, 21, 20],
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 2,
+                    pointHitRadius: 10,
+                    data:data.orderDelivered.map((col)=>col.delivery_count),
                     spanGaps: false,
                 },
+                {
+                    label: "Canceled",
+                    fill: true,
+                    lineTension: 0.4,
+                    backgroundColor: "transparent",
+                    borderColor: "#FF0000",
+                    pointBorderColor: "#FF0000",
+                    pointHoverBackgroundColor: "#FF0000",
+                    borderCapStyle: "butt",
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: "miter",
+                    borderWidth: 2,
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 5,
+                    pointHoverRadius: 5,
+                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 2,
+                    pointHitRadius: 10,
+                    data:data.orderCanceled.map((col)=>col.canceled_count),
+                    spanGaps: false,
+                },
+                {
+                    label: "Returned",
+                    fill: true,
+                    lineTension: 0.4,
+                    backgroundColor: "transparent",
+                    borderColor: "#FFA500",
+                    pointBorderColor: "#FFA500",
+                    pointHoverBackgroundColor: "#FFA500",
+                    borderCapStyle: "butt",
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: "miter",
+                    borderWidth: 2,
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 5,
+                    pointHoverRadius: 5,
+                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 2,
+                    pointHitRadius: 10,
+                    data:data.orderReturned.map((col)=>col.returned_count),
+                    spanGaps: false,
+                },
+                
             ],
         },
     });
+})
 
-    // ------------------------------------------------------- //
-    // Bar Chart
-    // ------------------------------------------------------ //
-    const BARCHARTEXaMPLE2 = document.getElementById("barChartExample2");
-    var barChartExample = new Chart(BARCHARTEXaMPLE2, {
-        type: "bar",
-        options: {
-            scales: {
-                xAxes: [
-                    {
-                        display: false,
-                        gridLines: {
-                            color: "#eee",
-                        },
-                    },
-                ],
-                yAxes: [
-                    {
-                        display: false,
-                        gridLines: {
-                            color: "#eee",
-                        },
-                    },
-                ],
-            },
-        },
-        data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            datasets: [
-                {
-                    label: "Data Set 1",
-                    backgroundColor: [
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                    ],
-                    hoverBackgroundColor: [
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                    ],
-                    borderColor: [
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                    ],
-                    borderWidth: 1,
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                },
-                {
-                    label: "Data Set 2",
-                    backgroundColor: [
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                    ],
-                    hoverBackgroundColor: [
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                        "rgba(238, 139, 152, 0.7)",
-                    ],
-                    borderColor: [
-                        "rgba(238, 139, 152, 1)",
-                        "rgba(238, 139, 152, 1)",
-                        "rgba(238, 139, 152, 1)",
-                        "rgba(238, 139, 152, 1)",
-                        "rgba(238, 139, 152, 1)",
-                        "rgba(238, 139, 152, 1)",
-                        "rgba(238, 139, 152, 1)",
-                    ],
-                    borderWidth: 1,
-                    data: [35, 40, 60, 47, 88, 27, 30],
-                },
-            ],
-        },
-    });
+fetch("http://localhost:3000/admin/monthly-data",{
+    method:"POST"
+})
+.then((res)=>{
+    return res.json()
+})
+.then((res)=>{
+    let orderProcessing=0;
+    let orderShipped=0;
+    let orderDelivered=0;
+    let orderCanceled=0;
+    let orderReturned=0;
+    res.forEach((order)=>{
+        if(order.status==="processing"){
+            orderProcessing = orderProcessing+1;
+        }else if(order.status==="shipped"){
+            orderShipped = orderShipped+1;
+        }else if(order.status==="delivered"){
+            orderDelivered = orderDelivered+1;
+        }else if(order.status==="canceled"){
+            orderCanceled = orderCanceled+1;
+        }else if(order.status==="returned"){
+            orderReturned = orderReturned+1;
+        }
+        
+    })
 
-    // ------------------------------------------------------- //
-    // Pie Chart 1
-    // ------------------------------------------------------ //
-    const PIECHARTHOME1 = document.getElementById("pieChartHome1");
-    var myPieChart = new Chart(PIECHARTHOME1, {
-        type: "doughnut",
-        options: {
-            cutoutPercentage: 90,
-            legend: {
-                display: false,
-            },
-        },
-        data: {
-            labels: ["First", "Second", "Third", "Fourth"],
-            datasets: [
-                {
-                    data: [300, 50, 100, 60],
-                    borderWidth: [0, 0, 0, 0],
-                    backgroundColor: ["#6933b9", "#8553d1", "#a372ec", "#be9df1"],
-                    hoverBackgroundColor: ["#6933b9", "#8553d1", "#a372ec", "#be9df1"],
-                },
-            ],
-        },
-    });
+    // POLAR CHART
+    const POLARCHART = document.getElementById("polarchart");
+    const data = {
+        labels: [
+          'Processing',
+          'Shipped',
+          'Delivered',
+          'Canceled',
+          'Returned',
+        ],
+        datasets: [{
+            label: 'My First Dataset',
+            data: [orderProcessing, orderShipped, orderDelivered, orderCanceled, orderReturned],
+            backgroundColor: [
+              '#FFFF00',
+              '#8F00FF',
+              '#00FF00',
+              '#FF0000"',
+              '#FFA500'
+            ]
+          }]
+        };
+    var homePolarChart = new Chart(POLARCHART, {
+        type: 'polarArea',
+        data: data,
+        options: {}
+    })
+})
 
-    // ------------------------------------------------------- //
-    // Pie Chart 2
-    // ------------------------------------------------------ //
-    const PIECHARTHOME2 = document.getElementById("pieChartHome2");
-    var myPieChart = new Chart(PIECHARTHOME2, {
-        type: "doughnut",
-        options: {
-            cutoutPercentage: 90,
-            legend: {
-                display: false,
-            },
-        },
-        data: {
-            labels: ["First", "Second", "Third", "Fourth"],
-            datasets: [
-                {
-                    data: [80, 70, 100, 60],
-                    borderWidth: [0, 0, 0, 0],
-                    backgroundColor: ["#9528b9", "#b046d4", "#c767e7", "#e394fe"],
-                    hoverBackgroundColor: ["#9528b9", "#b046d4", "#c767e7", "#e394fe"],
-                },
-            ],
-        },
-    });
-
-    // ------------------------------------------------------- //
-    // Pie Chart 3
-    // ------------------------------------------------------ //
-    const PIECHARTHOME3 = document.getElementById("pieChartHome3");
-    var myPieChart = new Chart(PIECHARTHOME3, {
-        type: "doughnut",
-        options: {
-            cutoutPercentage: 90,
-            legend: {
-                display: false,
-            },
-        },
-        data: {
-            labels: ["First", "Second", "Third", "Fourth"],
-            datasets: [
-                {
-                    data: [120, 90, 77, 95],
-                    borderWidth: [0, 0, 0, 0],
-                    backgroundColor: ["#da4d60", "#e96577", "#f28695", "#ffb6c1"],
-                    hoverBackgroundColor: ["#da4d60", "#e96577", "#f28695", "#ffb6c1"],
-                },
-            ],
-        },
-    });
-
-    // ------------------------------------------------------- //
-    // Sales Bar Chart 1
-    // ------------------------------------------------------ //
-    const SALESBARCHART1 = document.getElementById("salesBarChart1");
-    var barChartHome = new Chart(SALESBARCHART1, {
-        type: "bar",
-        options: {
-            scales: {
-                xAxes: [
-                    {
-                        display: false,
-                        barPercentage: 0.2,
-                    },
-                ],
-                yAxes: [
-                    {
-                        display: false,
-                    },
-                ],
-            },
-            legend: {
-                display: false,
-            },
-        },
-        data: {
-            labels: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
-            datasets: [
-                {
-                    label: "Data Set 1",
-                    backgroundColor: [
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                    ],
-                    borderColor: [
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                        "#EF8C99",
-                    ],
-                    borderWidth: 0.2,
-                    data: [35, 55, 65, 85, 40, 30, 18, 35, 20, 70],
-                },
-            ],
-        },
-    });
-
-    // ------------------------------------------------------- //
-    // Sales Bar Chart 21
-    // ------------------------------------------------------ //
-    const SALESBARCHART2 = document.getElementById("salesBarChart2");
-    var barChartHome = new Chart(SALESBARCHART2, {
-        type: "bar",
-        options: {
-            scales: {
-                xAxes: [
-                    {
-                        display: false,
-                        barPercentage: 0.2,
-                    },
-                ],
-                yAxes: [
-                    {
-                        display: false,
-                    },
-                ],
-            },
-            legend: {
-                display: false,
-            },
-        },
-        data: {
-            labels: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
-            datasets: [
-                {
-                    label: "Data Set 1",
-                    backgroundColor: [
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                    ],
-                    borderColor: [
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                        "#CF53F9",
-                    ],
-                    borderWidth: 0.2,
-                    data: [44, 75, 65, 34, 60, 45, 22, 35, 30, 63],
-                },
-            ],
-        },
-    });
-
-    // ------------------------------------------------------- //
-    // Pie Chart
-    // ------------------------------------------------------ //
-    const VISITPIECHART = document.getElementById("visitPieChart");
-    var pieChartExample = new Chart(VISITPIECHART, {
-        type: "pie",
-        options: {
-            legend: {
-                display: false,
-            },
-        },
-        data: {
-            labels: ["A", "B", "C", "D"],
-            datasets: [
-                {
-                    data: [300, 50, 100, 80],
-                    borderWidth: 0,
-                    backgroundColor: ["#723ac3", "#864DD9", "#9762e6", "#a678eb"],
-                    hoverBackgroundColor: ["#723ac3", "#864DD9", "#9762e6", "#a678eb"],
-                },
-            ],
-        },
-    });
-
-    var pieChartExample = {
-        responsive: true,
-    };
-});

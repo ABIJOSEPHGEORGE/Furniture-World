@@ -5,12 +5,11 @@ const Product = mongoose.model('Product',new mongoose.Schema({
     product_name:{
         type:String,
         required:true,
-        unique:true,
     },
-    parent_category:[{
+    parent_category:{
         type:mongoose.Types.ObjectId,
         ref: 'Category',
-    }],
+    },
     sub_category:{
         type:String,
     },
@@ -21,6 +20,7 @@ const Product = mongoose.model('Product',new mongoose.Schema({
     stock:{
         type:Number,
         required:true,
+        min:0,
     },
     measurements:{
         type:Object,

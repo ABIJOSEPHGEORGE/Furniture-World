@@ -4327,3 +4327,91 @@ readers do not read off random characters that represent icons */
 .fas {
   font-family: 'Font Awesome 5 Free';
   font-weight: 900; }
+
+
+#form-label{
+  font-size: 14px;
+  margin: 0;
+}
+
+.input-container{
+  text-align: start;
+}
+.swal2-container.swal2-center>.swal2-popup {
+  width: 50% !important;
+}
+
+.cup{
+  cursor: pointer;
+}
+
+.category-option{
+  background-color: #FF3368;
+  
+}
+
+#category-search{
+  outline: none;
+  border: none;
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  padding: 5px;
+  
+}
+#search-suggestions{
+  border-top: 2px white;
+  text-align: start;
+  color: white;
+  padding: 1% 0% 1% 3%;
+}
+
+#suggestion-txt::before{
+  content: "Search for all '";
+}
+#suggestion-txt::after{
+  content: "'";
+}
+
+/* user profile */
+/* .card{
+	width: 200px;
+	border: none;
+	border-radius: 20px;
+	margin-top: 25%;
+} */
+
+
+.wallet-counter-box {
+	display: block;
+	background: #f6f6f6;
+	padding: 15px 5px 5px;
+	text-align: center;
+  border-radius: 10px;
+}
+
+.wallet-counter-box p {
+	margin: 5px 0 0;
+	padding: 0;
+	color: #909090;
+	font-size: 18px;
+	font-weight: 500
+}
+
+.wallet-counter-box i {
+	font-size: 30px;
+	margin: 0 0 15px;
+	color: #d2d2d2
+}
+
+
+
+.wallet-counter-box.colored {
+      background: #F13D80;
+}
+
+.wallet-counter-box.colored p,
+.wallet-counter-box.colored i,
+.wallet-counter-box.colored .counter {
+	color: #fff
+}

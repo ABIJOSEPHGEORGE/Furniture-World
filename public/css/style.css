@@ -2150,7 +2150,7 @@ ul {
 .main_menu .main-menu-item ul li .nav-link {
   color: #000;
   font-size: 15px;
-  padding: 36px 23px;
+  padding: 36px 13px;
   font-family: "Poppins", sans-serif;
   text-transform: capitalize;
   line-height: 12px;
@@ -3454,11 +3454,14 @@ ul {
 }
 
 /* line 204, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-.widgets_inner {
+/* .widgets_inner {
   padding-left: 30px;
   padding-right: 30px;
   padding-top: 0px;
   padding-bottom: 15px;
+} */
+#options {
+  text-transform: capitalize;
 }
 
 @media (max-width: 991px) {
@@ -3495,14 +3498,14 @@ ul {
 }
 
 /* line 240, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-.p_filter_widgets .widgets_inner {
+/* .p_filter_widgets .widgets_inner {
   border-bottom: 1px solid #eeeeee;
-}
+} */
 
 /* line 243, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-.p_filter_widgets .widgets_inner:last-child {
+/* .p_filter_widgets .widgets_inner:last-child {
   border-bottom: 0px;
-}
+} */
 
 /* line 248, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .p_filter_widgets .list {
@@ -4876,7 +4879,7 @@ ul {
 
 /* line 1510, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .cupon_area .tp_btn {
-  margin-left: 30px;
+  margin-left: 0px;
 }
 
 @media (max-width: 991px) {
@@ -7793,4 +7796,51 @@ h6 {
 
 
 
+
+  #filterSortForm {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  #filterSortForm div {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    #filterSortForm div {
+      width: 100%;
+    }
+  }
+
+  #filterSortForm label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  #filterSortForm select {
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    border:none;
+  }
+
+  #filterSortForm select:focus{
+    border: none;
+  }
+
+  #filterSortForm input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #F13D80;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
 

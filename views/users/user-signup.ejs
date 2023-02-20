@@ -1,4 +1,4 @@
-    <%- include('includes/users/head') %>
+<%- include('includes/users/head') %>
     <!--================login_part Area =================-->
     <section class="login_part pt-5">
         <div class="container">
@@ -33,14 +33,14 @@
                                     <input type="number" class="form-control" id="phone" name="phone" value=""
                                         placeholder="Phone Number" required minlength="10" maxlength="10">
                                 </div>
-                                
+
                                 <div class="col-md-12 form-group p_star">
                                     <input type="password" class="form-control" id="password" name="password" value=""
                                         placeholder="Password" required>
                                 </div>
                                 <div class="col-md-12 form-group p_star">
-                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" value=""
-                                        placeholder="Confirm Password" required>
+                                    <input type="password" class="form-control" id="confirm_password"
+                                        name="confirm_password" value="" placeholder="Confirm Password" required>
                                 </div>
                                 <div class="col-md-12 form-group">
                                     <div class="creat_account d-flex align-items-center">
@@ -48,11 +48,13 @@
                                         <label for="f-option">Remember me</label>
                                     </div>
                                     <%if (typeof err!="undefined" && err) {%>
-                                    <p class="text-danger text-center"><%=err%></p>
-                                   <%}%>                                   
-                                    <button type="submit" value="submit" class="btn_3">
-                                        Signup
-                                    </button>
+                                        <p class="text-danger text-center">
+                                            <%=err%>
+                                        </p>
+                                        <%}%>
+                                            <button type="submit" value="submit" class="btn_3">
+                                                Signup
+                                            </button>
                                 </div>
                             </form>
                         </div>
@@ -62,4 +64,9 @@
         </div>
     </section>
     <!--================login_part end =================-->
-  
+    <script>
+        // Handling the Confirm form resubmission
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>

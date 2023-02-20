@@ -1,81 +1,89 @@
 <%- include('includes/admin/head') %>
-<%- include('includes/admin/header') %>
+    <%- include('includes/admin/header') %>
 
-<section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
-    <div class="bg-black">
-        <p class="text-white px-3 fw-bold py-3">Product / View Product</p>
-    </div>
-    <div class="row col-12">
-        <div class="row col-6">
-            <%product.images.forEach((image)=>{%>
-                <div class="image-container col-md-6 col-12">
-                    <div class=" col-12 p-2">
-                        <img src="<%-image.URL%>" alt="" srcset="" class="w-75">
+        <section id="custom-container" class="container w-100 mt-3 mx-0 p-0 pb-5">
+            <div class="bg-black">
+                <p class="text-white px-3 fw-bold py-3">Product / View Product</p>
+            </div>
+            <div class="row col-12">
+                <div class="row col-6">
+                    <%product.images.forEach((image)=>{%>
+                        <div class="image-container col-md-6 col-12">
+                            <div class=" col-12 p-2">
+                                <img src="<%-image.URL%>" alt="" srcset="" class="w-75">
+                            </div>
+                        </div>
+                        <%})%>
+                </div>
+
+                <!-- content section -->
+                <div class="row col-md-6 col-12">
+                    <div class="product-title col-12">
+                        <p class="fs-4 fw-bold m-0 p-0 text-white">Product Name</p>
+                        <p class="fs-6 text-white"><%-product.product_name%></p>
+                    </div>
+                    <div class="product-title col-12">
+                        <p class="fs-4 fw-bold m-0 p-0 text-white">Product Description</p>
+                        <p class="fs-6 text-white"><%-product.description%></p>
+                    </div>
+                    <div class="row col-12">
+                        <div class="col-md-6 col-12">
+                            <p class="fs-4 fw-bold m-0 p-0 text-white">Product Category</p>
+                            <p class="fs-6 text-white">
+                                <%-product.parent_category.category_name.charAt(0).toUpperCase()+product.parent_category.category_name.substring(1).replaceAll("-"," ")%></p>
+                </div>
+                <div class=" col-md-6 col-12">
+                                    <p class="fs-4 fw-bold m-0 p-0 text-white">Product sub Category</p>
+                                    <p class="fs-6 text-white">
+                                        <%-product.sub_category.charAt(0).toUpperCase()+product.sub_category.substring(1).replaceAll("-"," ")%></p>
+                </div>
+            </div>
+            <div class=" row col-12">
+                                            <div class="col-md-6 col-12">
+                                                <p class="fs-4 fw-bold m-0 p-0 text-white">Price</p>
+                                                <p class="fs-6 text-white"><%-product.price%></p>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <p class="fs-4 fw-bold m-0 p-0 text-white">Sale Price</p>
+                                                <p class="fs-6 text-white"><%-product.sale_price%></p>
+                                            </div>
+                        </div>
+                        <div class="row col-12">
+                            <div class="col-md-3 col-6">
+                                <p class="fs-4 fw-bold m-0 p-0 text-white">Width</p>
+                                <p class="fs-6 text-white"><%-product.measurements.width%> cm</p>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <p class="fs-4 fw-bold m-0 p-0 text-white">Height</p>
+                                <p class="fs-6 text-white"><%-product.measurements.height%> cm</p>
+                            </div>
+
+                            <div class="col-md-3 col-6">
+                                <p class="fs-4 fw-bold m-0 p-0 text-white">Depth</p>
+                                <p class="fs-6 text-white"><%-product.measurements.depth%> cm</p>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <p class="fs-4 fw-bold m-0 p-0 text-white">Max Load</p>
+                                <p class="fs-6 text-white"><%-product.measurements.max_load%> kg</p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="btn-container row col-12 d-flex flex-row justify-content-center mt-2">
+                        <button class="btn py-2 px-5 bg-success col-md-3 col-5 mx-2"><a
+                                href="/admin/edit-product?id=<%-product._id%>"
+                                class="text-white text-center text-decoration-none">Edit Product</a></button>
+                        <button class="btn py-2 px-5 bg-danger col-md-3 col-5 mx-2"><a
+                                href="/admin/delete-product/<%-product._id%>?_method=DELETE"
+                                class="text-white text-center text-decoration-none">Delete Product</a></button>
                     </div>
                 </div>
-            <%})%>
-        </div>
 
-        <!-- content section -->
-        <div class="row col-md-6 col-12">
-            <div class="product-title col-12">
-                <p class="fs-4 fw-bold m-0 p-0 text-white">Product Name</p>
-                <p class="fs-6 text-white"><%-product.product_name%></p>
-            </div>
-            <div class="product-title col-12">
-                <p class="fs-4 fw-bold m-0 p-0 text-white">Product Description</p>
-                <p class="fs-6 text-white">product description</p>
-            </div>
-            <div class="row col-12">
-                <div class="col-md-6 col-12">
-                    <p class="fs-4 fw-bold m-0 p-0 text-white">Product Category</p>
-                   <p class="fs-6 text-white"><%-product.parent_category[0].category_name%></p>
-                </div>
-                <div class="col-md-6 col-12">
-                    <p class="fs-4 fw-bold m-0 p-0 text-white">Product sub Category</p>
-                   <p class="fs-6 text-white"><%-product.sub_category%></p>
-                </div>
-            </div>
-            <div class="row col-12">
-                <div class="col-md-6 col-12">
-                    <p class="fs-4 fw-bold m-0 p-0 text-white">Price</p>
-                   <p class="fs-6 text-white"><%-product.price%></p>
-                </div>
-                <div class="col-md-6 col-12">
-                    <p class="fs-4 fw-bold m-0 p-0 text-white">Sale Price</p>
-                   <p class="fs-6 text-white"><%-product.sale_price%></p>
-                </div>
-            </div>
-            <div class="row col-12">
-                <div class="col-md-3 col-6">
-                    <p class="fs-4 fw-bold m-0 p-0 text-white">Width</p>
-                   <p class="fs-6 text-white"><%-product.measurements.width%> cm</p>
-                </div>
-                <div class="col-md-3 col-6">
-                    <p class="fs-4 fw-bold m-0 p-0 text-white">Height</p>
-                   <p class="fs-6 text-white"><%-product.measurements.height%> cm</p>
-                </div>
-                
-                <div class="col-md-3 col-6">
-                    <p class="fs-4 fw-bold m-0 p-0 text-white">Depth</p>
-                   <p class="fs-6 text-white"><%-product.measurements.depth%> cm</p>
-                </div>
-                <div class="col-md-3 col-6">
-                    <p class="fs-4 fw-bold m-0 p-0 text-white">Max Load</p>
-                   <p class="fs-6 text-white"><%-product.measurements.max_load%> kg</p>
-                </div>
-                
-            </div>
-        </div>
-        <div class="btn-container row col-12 d-flex flex-row justify-content-center mt-2">
-            <button class="btn py-2 px-5 bg-success col-md-3 col-5 mx-2"><a href="/admin/edit-product?id=<%-product._id%>" class="text-white text-center text-decoration-none">Edit Product</a></button>
-            <button class="btn py-2 px-5 bg-danger col-md-3 col-5 mx-2"><a href="/admin/delete-product/<%-product._id%>?_method=DELETE" class="text-white text-center text-decoration-none">Delete Product</a></button>
-        </div>
-    </div>
+                <%if (typeof err!="undefined" && err) {%>
+                    <p class="text-danger text-center">
+                        <%=err%>
+                    </p>
+                    <%}%>
+        </section>
 
-        <%if (typeof err!="undefined" && err) {%>
-            <p class="text-danger text-center"><%=err%></p>
-        <%}%>
-</section>
-
-<%- include('includes/admin/footer') %>
+        <%- include('includes/admin/footer') %>

@@ -1,42 +1,52 @@
 <%- include('includes/users/head') %>
 
-<!--================verify-otp Area =================-->
-<section class="login_part pt-5">
-    <div class="container d-flex justify-content-center">
-        <div class="row align-items-center">
-            <div class="col-lg-6 col-md-6">
-                <div class="login_part_form">
-                    <div class="login_part_form_iner">
-                        <h3 class="text-center">Verify Otp</h3>
-                        <form class="contact_form" action="/users/verify-user" method="post">
-                            <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="verify-otp" name="verify_otp" value=""
-                                    placeholder="Enter otp to verify" required>
+    <!--================verify-otp Area =================-->
+    <section class="login_part pt-5">
+        <div class="container d-flex justify-content-center">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6">
+                    <div class="login_part_form">
+                        <div class="login_part_form_iner">
+                            <h3 class="text-center">Verify Otp</h3>
+                            <form class="contact_form" action="/users/verify-user" method="post">
+                                <div class="col-md-12 form-group p_star">
+                                    <input type="text" class="form-control" id="verify-otp" name="verify_otp" value=""
+                                        placeholder="Enter otp to verify" required>
                                     <div class="d-flex justify-content-between">
                                         <a href="#" class="text-success" id="otp-success"></a>
                                         <a href="#" class="text-success" id="resend-otp"></a>
                                     </div>
-                                    
-                            </div>
-                            
-                            <div class="col-12 d-flex flex-md-row flex-column-reverse ">
-                               
-                               <button value="Cancel" class="btn_3 col-md-6 col-12 mr-md-3 my-2 my-md-0">
-                                <a href="/users/signup" class="tex-decoration-none text-white">Cancel</a>
-                                </button>                                 
-                                <button id="verify-btn" type="submit" value="verify" class="btn_3 col-md-6 col-12 mr-md-3 my-2 my-md-0">
-                                    Verify
-                                </button>
-                            </div>
-                            <%if (typeof err!="undefined" && err) {%>
-                                <p class="text-danger text-center"><%=err%></p>
-                               <%}%>
-                        </form>
+
+                                </div>
+
+                                <div class="col-12 d-flex flex-md-row flex-column-reverse ">
+
+                                    <button value="Cancel" class="btn_3 col-md-6 col-12 mr-md-3 my-2 my-md-0">
+                                        <a href="/users/signup" class="tex-decoration-none text-white">Cancel</a>
+                                    </button>
+                                    <button id="verify-btn" type="submit" value="verify"
+                                        class="btn_3 col-md-6 col-12 mr-md-3 my-2 my-md-0">
+                                        Verify
+                                    </button>
+                                </div>
+                                <%if (typeof err!="undefined" && err) {%>
+                                    <p class="text-danger text-center">
+                                        <%=err%>
+                                    </p>
+                                    <%}%>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<!--================verify-otp end =================-->
-<%- include('includes/users/resend-otp') %>
+    </section>
+    <!--================verify-otp end =================-->
+    <script src="/js/otp/resend-otp.js"></script>
+
+    <script>
+        // Handling the Confirm form resubmission
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>

@@ -1,0 +1,757 @@
+<%- include('includes/users/head') %>
+	<%- include('includes/users/header') %>
+		<!-- breadcrumb start-->
+		<section class="breadcrumb breadcrumb_bg">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-8">
+						<div class="breadcrumb_iner">
+							<div class="breadcrumb_iner_item">
+								<h2>Account</h2>
+								<p>Home <span>-</span>Account</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<div class="container mt-4">
+			<div class="four col-md-3">
+				<div class="wallet-counter-box colored">
+					<i class="fa-solid fa-wallet"></i>
+					<p>Wallet Balance</p>
+					<p id="wallet-balance"></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-3 my-lg-0 my-md-1">
+					<div id="sidebar" class="bg-purple">
+						<div class="h4 text-white">Account</div>
+						<ul>
+							<li id="my-profile" class="cup">
+								<a class="text-decoration-none d-flex align-items-center">
+									<span class="material-symbols-outlined text-primary">
+										face_4
+									</span>
+									<div class="d-flex flex-column px-2">
+										<div class="link text-primary">My Profile</div>
+									</div>
+								</a>
+							</li>
+							<li id="address-book" class="cup" onclick="addressMnmnt()">
+								<a class="text-decoration-none d-flex align-items-center">
+									<span class="material-symbols-outlined text-primary">
+										import_contacts
+									</span>
+									<div class="d-flex flex-column px-2">
+										<div class="link text-primary">Address Book</div>
+
+									</div>
+								</a>
+							</li>
+							<li class="cup" id="my-orders">
+								<a class="text-decoration-none d-flex align-items-center">
+									<span class="material-symbols-outlined text-primary">
+										inventory_2
+									</span>
+									<div class="d-flex flex-column px-2 text-primary">
+										<div class="link text-primary">My Orders</div>
+
+									</div>
+								</a>
+							</li>
+							<li class="cup">
+								<a href="#" class="text-decoration-none d-flex align-items-center">
+
+									<span class="material-symbols-outlined text-primary">
+										restart_alt
+									</span>
+
+									<div class="d-flex flex-column px-2" onclick="resetPasswordPage()">
+										<div class="link text-primary">Reset Password</div>
+
+									</div>
+								</a>
+							</li>
+
+							<li class="cup">
+								<a href="/users/logout" class="text-decoration-none d-flex align-items-center">
+
+									<span class="material-symbols-outlined text-primary">
+										logout
+									</span>
+
+									<div class="d-flex flex-column px-2">
+										<div class="link text-primary">Logout</div>
+
+									</div>
+								</a>
+							</li>
+
+						</ul>
+					</div>
+				</div>
+				<!-- content goes here -->
+				<div class="col-lg-9 my-lg-0 my-1" id="content-area">
+
+
+				</div>
+			</div>
+
+		</div>
+		<script>
+			const content_area = document.getElementById('content-area');
+			const my_profile = document.getElementById('my-profile');
+			const address_book = document.getElementById('address-book');
+			const my_orders = document.getElementById('my-orders');
+			const wallet_balance = document.getElementById('wallet-balance');
+
+			// loading the profile info when the page loads
+			myProfile()
+			walletBalance()
+			my_profile.addEventListener('click', () => {
+				myProfile()
+			})
+
+			my_orders.addEventListener('click', () => {
+				orderHistory()
+			})
+
+
+			function myProfile() {
+				fetch("http://localhost:3000/users/get-user-details")
+					.then((res) => {
+						return res.json()
+					})
+					.then((res) => {
+						if (res !== false) {
+
+							content_area.innerHTML = `
+		
+		<form style="padding:10%;" id="profile-form">
+			
+						<div class="row">
+						<div class="col-md-6">
+						<label for="firstName" class="form-label" id="first_name">First name</label>
+						<input type="text" class="form-control" id="firstName" name="first_name" required value="${res.first_name}">
+						</div>
+						<div class="col-md-6 mb-3">
+						<label for="lastName" class="form-label" id="last_name">Last name</label>
+						<input type="text" class="form-control" id="lastName" name="last_name" required value="${res.last_name}">
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="email" class="form-label" id="email">Email</label>
+						<input type="email" class="form-control" id="email" name="email" required value="${res.email}">
+						<p id="err-msg" class="text-danger"></p>
+					</div>
+					<div class="mb-3">
+						<label for="phone" class="form-label" id="phone_number">Phone number</label>
+						<input type="tel" class="form-control" id="phone" name="phone" required value="${res.phone}">
+					</div>
+					</div>
+				</div>
+				<div class="d-flex justify-content-center align-items-center">
+				<button class="btn btn-primary border-0"  style="background-color:#F13D80" onclick="updateProfile(event,'${res.email}')">Update</button>
+				</div>
+					
+			</form>
+			`
+						}
+					})
+					.catch(() => {
+						location.href = "http://localhost:3000/users/signin";
+					})
+			}
+			// update profile
+
+			function updateProfile(event, email) {
+				event.preventDefault();
+				let profile_form = document.getElementById('profile-form');
+				let formData = new FormData(profile_form);
+				let data = Object.fromEntries(formData);
+				if (data.email == email) {
+					delete data.email;
+
+				}
+
+				fetch(`http://localhost:3000/users/update-profile`, {
+					method: "POST",
+					body: JSON.stringify(data),
+					headers: new Headers({
+						'Content-Type': 'application/json; charset=UTF-8'
+					})
+				})
+					.then((res) => {
+						return res.json()
+					})
+					.then((res) => {
+						if (res.err) {
+							document.getElementById('err-msg').innerHTML = `${res.err}`
+						} else {
+							Swal.fire(
+								'Great!',
+								'Profile updated successfully',
+								'success'
+							)
+							myProfile()
+						}
+					})
+					.catch((err) => {
+						location.href = "http://localhost:3000/users/signin"
+					})
+			}
+
+
+
+
+			// fetching the address
+			function addressMnmnt() {
+				content_area.innerHTML = `
+				<div class="container py-3 text-center">
+			<div class="row" style="background-color:#ecfdff;">
+				<div class="col-12">
+				<div class="d-flex justify-content-between align-items-center p-3 bg-black text-white">
+					<h5 class="mb-0">Select Address</h5>
+				</div>
+				</div>
+			</div>
+			<div class="row" id="select_address">
+				
+			</div>
+			<button class="tp_btn mt-2 ms-0 " id="add_addrs" onclick="addNewAddressPage()">Add New Address</button>
+			</div>
+		`
+				const select_address = document.getElementById('select_address');
+				const add_address = document.getElementById('add_addrs');
+				fetch("http://localhost:3000/users/all-address")
+					.then((res) => {
+						return res.json()
+					})
+					.then((res) => {
+						res.forEach((add) => {
+							let single_address = document.createElement('div');
+							single_address.classList.add('col-12');
+							single_address.classList.add('col-md-4')
+							single_address.classList.add('text-left');
+							single_address.style.backgroundColor = "#ECFDFF";
+							single_address.style.margin = "12px"
+							single_address.innerHTML =
+								`
+
+					<p>${add.f_name} ${add.l_name}</p>
+					<p>${add.number}, ${add.email}, ${add.company}</p>
+					<p>${add.addOne}, ${add.addTwo}, ${add.city}, ${add.state}, ${add.country}, ${add.zip}</p>
+					<div class="w-100 d-flex justify-content-between align-items-centere">
+					<div class="w-50 d-flex align-items-center cup" onclick="editAdd('${add._id}')">
+						<p class="fw-bold"> Edit </p>
+						<span class="material-symbols-outlined">
+						edit_note
+						</span>
+					</div>
+
+					<div class="w-50 d-flex align-items-center cup" onclick="deleteAddress('${add._id}')">
+						<p class="fw-bold"> Delete </p>
+						<span class="material-symbols-outlined">
+						delete
+						</span>
+					</div>
+					</div>
+				
+			`
+							select_address.insertAdjacentElement("beforeend", single_address);
+						})
+
+					})
+					.catch((err) => {
+						location.href = "http://localhost:3000/users/signin"
+					})
+			}
+
+			function addNewAddressPage() {
+				Swal.fire({
+					title: 'Add new address',
+					html: `
+        <div class="col-12">
+          <div class="row col-12 p-0 m-0">
+            <div class="col-12 col-lg-6 input-container">
+              <label for="first" id="form-label">First Name<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="first" name="first_name" placeholder="First Name" required>
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="last" id="form-label">Last Name<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="last" name="last_name" placeholder="Last Name" required>
+            </div>
+
+            <div class="col-12 input-container">
+              <label for="company" id="form-label">Company Name</label>
+              <input type="text" class="form-control my-2 mx-1" id="company" name="company_name" placeholder="Company name">
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="number" id="form-label">Mobile<span style="color: red;">*</span></label>
+              <input type="number" class="form-control my-2 mx-1" id="number" name="phone_number" placeholder="Mobile" required>
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="email" id="form-label">Email Address<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="email" name="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="col-12 input-container">
+              <label for="add1" id="form-label">Address Line 1<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="add1" name="address_one" placeholder="Address Line 1" required>
+            </div>
+
+            <div class="col-12 input-container">
+              <label for="add2" id="form-label">Address Line 2</label>
+              <input type="text" class="form-control my-2 mx-1" id="add2" name="address_two" placeholder="Address Line 2">
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="city" id="form-label">City<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="city" name="city" placeholder="City" required>
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="zip" id="form-label">Postcode/ZIP<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="zip" name="zip" placeholder="Postcode/ZIP" required>
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="state" id="form-label">State<span style="color: red;">*</span></label>
+              <input type="text" class="form-control col-12  my-2 mx-1" id="state" name="state" placeholder="State" required>
+            </div>
+            <div class="col-12 col-lg-6 input-container">
+              <label for="country" id="form-label">Country<span style="color: red;">*</span></label>
+              <input type="text" class="form-control col-12  my-2 mx-1" id="country" name="country" placeholder="Country" required>
+            </div>
+          </div>
+        </div>
+            `
+					,
+
+					showCancelButton: true,
+					focusConfirm: false,
+					confirmButtonColor: "#ff3368",
+					confirmButtonText: "Add address",
+					cancelButtonText: "Cancel",
+					preConfirm: () => {
+						const f_name = Swal.getPopup().querySelector('#first').value
+						const l_name = Swal.getPopup().querySelector('#last').value
+						const company = Swal.getPopup().querySelector('#company').value
+						const number = Swal.getPopup().querySelector('#number').value
+						const email = Swal.getPopup().querySelector('#email').value
+						const addOne = Swal.getPopup().querySelector('#add1').value
+						const addTwo = Swal.getPopup().querySelector('#add2').value
+						const city = Swal.getPopup().querySelector('#city').value
+						const zip = Swal.getPopup().querySelector('#zip').value
+						const state = Swal.getPopup().querySelector('#state').value
+						const country = Swal.getPopup().querySelector('#country').value
+
+
+						if (!first || !last || !number || !email || !addOne || !addTwo || !city || !state || !country) {
+							Swal.showValidationMessage(`All fields marked with * are required`)
+						}
+						return { f_name: f_name, l_name: l_name, company: company, number: number, email: email, addOne: addOne, addTwo: addTwo, city: city, zip: zip, state: state, country: country }
+					}
+				}).then((result) => {
+					if (result.isConfirmed) {
+						addNewAddrss(result.value)
+					}
+
+				})
+					.catch((err) => {
+						location.href = "http://localhost:3000/users/signin"
+					})
+			}
+
+
+
+			function editAdd(id) {
+				fetch(`http://localhost:3000/users/edit-address/${id}`)
+					.then((res) => {
+						return res.json();
+					})
+					.then((res) => {
+						if (res !== false) {
+							res.forEach((add) => {
+								Swal.fire({
+									title: 'Edit address',
+									html: `
+                  <div class="col-12">
+                    <div class="row col-12 p-0 m-0">
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="first" id="form-label">First Name<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="first" name="first_name" placeholder="First Name" value="${add.f_name}" required>
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="last" id="form-label">Last Name<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="last" name="last_name" placeholder="Last Name" value="${add.l_name}" required>
+                      </div>
+
+                      <div class="col-12 input-container">
+                        <label for="company" id="form-label">Company Name</label>
+                        <input type="text" class="form-control my-2 mx-1" id="company" name="company_name" placeholder="Company name" value="${add.company}">
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="number" id="form-label">Mobile<span style="color: red;">*</span></label>
+                        <input type="number" class="form-control my-2 mx-1" id="number" name="phone_number" placeholder="Mobile" value="${add.number}" required>
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="email" id="form-label">Email Address<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="email" name="email" placeholder="Email Address" value="${add.email}" required>
+                      </div>
+
+                      <div class="col-12 input-container">
+                        <label for="add1" id="form-label">Address Line 1<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="add1" name="address_one" placeholder="Address Line 1" value="${add.addOne}" required>
+                      </div>
+
+                      <div class="col-12 input-container">
+                        <label for="add2" id="form-label">Address Line 2</label>
+                        <input type="text" class="form-control my-2 mx-1" id="add2" name="address_two" placeholder="Address Line 2" value="${add.addTwo}">
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="city" id="form-label">City<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="city" name="city" placeholder="City" value="${add.city}" required>
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="zip" id="form-label">Postcode/ZIP<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="zip" name="zip" placeholder="Postcode/ZIP" value="${add.zip}" required>
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="state" id="form-label">State<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control col-12  my-2 mx-1" id="state" name="state" placeholder="State" value="${add.state}" required>
+                      </div>
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="country" id="form-label">Country<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control col-12  my-2 mx-1" id="country" name="country" placeholder="Country" value="${add.country}" required>
+                      </div>
+                    </div>
+                  </div>
+                      `
+									,
+
+
+									showCancelButton: true,
+									focusConfirm: false,
+									confirmButtonColor: "#ff3368",
+									confirmButtonText: "Update address",
+									cancelButtonText: "Cancel",
+									preConfirm: () => {
+										const f_name = Swal.getPopup().querySelector('#first').value
+										const l_name = Swal.getPopup().querySelector('#last').value
+										const company = Swal.getPopup().querySelector('#company').value
+										const number = Swal.getPopup().querySelector('#number').value
+										const email = Swal.getPopup().querySelector('#email').value
+										const addOne = Swal.getPopup().querySelector('#add1').value
+										const addTwo = Swal.getPopup().querySelector('#add2').value
+										const city = Swal.getPopup().querySelector('#city').value
+										const zip = Swal.getPopup().querySelector('#zip').value
+										const state = Swal.getPopup().querySelector('#state').value
+										const country = Swal.getPopup().querySelector('#country').value
+
+
+										if (!first || !last || !number || !email || !addOne || !addTwo || !city || !state || !country) {
+											Swal.showValidationMessage(`All fields marked with * are required`)
+										}
+										return { id: add._id, f_name: f_name, l_name: l_name, company: company, number: number, email: email, addOne: addOne, addTwo: addTwo, city: city, zip: zip, state: state, country: country }
+									}
+								}).then((result) => {
+									if (result.isConfirmed) {
+										updateAdd(result.value)
+									}
+
+								})
+									.catch((err) => {
+										location.href = "http://localhost:3000/users/signin"
+									})
+							})
+						}
+					})
+			}
+
+			// updating the address
+			function updateAdd(result) {
+				fetch(`http://localhost:3000/users/update-address/${result.id}`, {
+					method: "PUT",
+					body: JSON.stringify(result),
+					headers: new Headers({
+						'Content-Type': 'application/json; charset=UTF-8'
+					})
+				}).then((res) => {
+					return res.json()
+				})
+					.then((res) => {
+						if (res == true) {
+							select_address.innerHTML = ""
+							addressMnmnt()
+							Swal.fire({
+								icon: 'success',
+								title: 'Success',
+								text: 'Address Updated',
+							})
+						}
+					})
+					.catch((err) => {
+						location.href = "http://localhost:3000/users/signin"
+					})
+			}
+
+			function addNewAddrss(addr) {
+				fetch(`http://localhost:3000/users/add-new-address`,
+					{
+						method: "POST",
+						body: JSON.stringify(addr),
+						headers: new Headers({
+							'Content-Type': 'application/json; charset=UTF-8'
+						})
+					})
+					.then((res) => {
+						return res.json()
+					})
+					.then((res) => {
+						if (res === true) {
+							Swal.fire({
+								icon: 'success',
+								title: 'Success',
+								text: 'New address added',
+							})
+							select_address.innerHTML = ""
+							addressMnmnt()
+						} else {
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								text: 'Something went wrong!',
+							})
+						}
+					})
+					.catch((err) => {
+						location.href = "http://localhost:3000/users/signin"
+					})
+			}
+
+			// delete address
+			function deleteAddress(id) {
+				fetch(`http://localhost:3000/users/delete-address/${id}`, {
+					method: "DELETE"
+				})
+					.then((res) => {
+						return res.json()
+					})
+					.then((res) => {
+						if (res === true) {
+							addressMnmnt()
+						}
+					})
+					.catch((err) => {
+						location.href = "http://localhost:3000/users/signin"
+					})
+			}
+
+			function orderHistory() {
+				fetch("http://localhost:3000/users/all-orders", {
+					method: "POST"
+				})
+					.then((res) => {
+						return res.json();
+					})
+					.then((res) => {
+						content_area.innerHTML = `
+		<div id="order-content" class="bg-white border">
+				
+				<div class="text-uppercase">My recent orders</div>
+				
+				
+				</div>
+			</div>
+		`
+						const order_content = document.getElementById('order-content');
+						order_content.style.padding = "2%"
+						res.forEach((order) => {
+							let single_order = `
+			<div class="order my-3">
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="d-flex flex-column justify-content-between order-summary">
+								<div class="d-flex align-items-center">
+									<div class="text-uppercase">Order #${order._id}</div>
+								</div>
+								<div class="fs-8">Products #${order.products.length}</div>
+								<div class="fs-8">${order.order_date.slice(0, 10)}</div>
+								
+							</div>
+						</div>
+						<div class="col-lg-8 cup">
+							<div class="d-sm-flex align-items-sm-start justify-content-sm-between">
+								<div class="status">Status : ${order.status.toUpperCase().replaceAll("_", " ")}</div>
+								<a class="btn btn-primary text-uppercase" href="/users/order-details/${order._id}">order info</a>
+							</div>
+							<div class="progressbar-track">
+								<ul class="progressbar">
+									<li id="step-1-${order._id}" class="text-muted green">
+										<span class="fas fa-gift icon-${order._id}"></span>
+									</li>
+									<li id="step-2-${order._id}" class="text-muted">
+										<span class="fas fa-check icon-${order._id}"></span>
+									</li>
+									<li id="step-3-${order._id}" class="text-muted">
+										<span class="fas fa-truck icon-${order._id}"></span>
+									</li>
+									<li id="step-4-${order._id}" class="text-muted">
+										<span class="fas fa-box icon-${order._id}"></span>
+									</li>
+									
+									<li id="step-5-${order._id}" class="text-muted">
+										<span class="fas fa-box-open icon-${order._id}"></span>
+									</li>
+								</ul>
+								<div id="tracker"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			`
+
+							order_content.insertAdjacentHTML("beforeend", single_order);
+							const step_one = document.getElementById(`step-1-${order._id}`);
+							const step_two = document.getElementById(`step-2-${order._id}`);
+							const step_three = document.getElementById(`step-3-${order._id}`);
+							const step_four = document.getElementById(`step-4-${order._id}`);
+							const step_five = document.getElementById(`step-5-${order._id}`);
+							const icon = document.querySelectorAll(`.icon-${order._id}`);
+
+							if (order.status === "processing") {
+								step_two.classList.add('green')
+							} else if (order.status === "shipped") {
+								step_two.classList.add('green');
+								step_three.classList.add('green')
+							} else if (order.status === "out_for_delivery") {
+								step_two.classList.add('green');
+								step_three.classList.add('green');
+								step_four.classList.add('green');
+							} else if (order.status === "delivered") {
+								step_two.classList.add('green');
+								step_three.classList.add('green');
+								step_four.classList.add('green');
+								step_five.classList.add('green');
+							} else if (order.status === "return" || order.status === "cancel") {
+								icon.forEach((ele) => {
+									ele.classList.add('text-danger');
+								})
+								step_one.classList.add('bg-white');
+								step_one.style.borderColor = "red"
+								step_two.classList.add('bg-white');
+								step_two.style.borderColor = "red"
+								step_three.classList.add('bg-white');
+								step_three.style.borderColor = "red"
+								step_four.classList.add('bg-white');
+								step_four.style.borderColor = "red";
+								step_five.classList.add('bg-white');
+								step_five.style.borderColor = "red"
+								icon[4].classList.remove('fa-box-open');
+								icon[4].classList.add('fa-truck');
+								icon[4].classList.add('fa-flip-horizontal');
+							}
+						})
+
+					})
+					.catch((err) => {
+						location.href = "http://localhost:3000/users/signin"
+					})
+			}
+
+			function resetPasswordPage() {
+
+				content_area.innerHTML = `
+			<div class="container p-5">
+				<form id="reset-pass-form">
+				<div class="form-group">
+					<label for="oldPassword">Old Password:</label>
+					<input type="password" name="old_password" class="form-control" id="oldPassword" placeholder="Enter old password">
+				</div>
+				<div class="form-group">
+					<label for="newPassword">New Password:</label>
+					<input type="password" name="new_password" class="form-control" id="newPassword" placeholder="Enter new password">
+				</div>
+				<div class="form-group">
+					<label for="confirmPassword">Confirm New Password:</label>
+					<input type="password" name="confirm_new_password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+				</div>
+				<p class="text-danger text-center" id="reset-err"></p>
+				<button  class="btn mt-4 col-3 text-white " style="background:#f13d80" onclick="resetPassword(event)">Reset</button>
+				</form>
+				
+			</div>
+			`
+
+			}
+
+			function resetPassword(event) {
+
+				event.preventDefault();
+				const reset_pass_form = document.getElementById('reset-pass-form');
+				let formData = new FormData(reset_pass_form);
+				let data = Object.fromEntries(formData);
+				fetch("http://localhost:3000/users/profile-reset-password", {
+					method: "PUT",
+					body: JSON.stringify(data),
+					headers: new Headers({
+						'Content-Type': 'application/json; charset=UTF-8'
+					})
+				})
+					.then((res) => {
+						return res.json()
+					})
+					.then((res) => {
+
+						if (res.err) {
+							const reset_err = document.getElementById('reset-err');
+							reset_err.innerText = res.err;
+						} else {
+							Swal.fire(
+								'You have successfully reseted your password',
+								'Kindly please login again',
+								'success'
+							).then((res) => {
+								location.href = "http://localhost:3000/users/logout"
+							})
+						}
+					})
+					.catch((err) => {
+						location.href = "http://localhost:3000/users/signin"
+					})
+			}
+
+
+			// loading user wallet balance
+			function walletBalance() {
+				fetch("http://localhost:3000/users/wallet-balance")
+					.then((res) => {
+						return res.json()
+					})
+					.then((res) => {
+						if (res !== false) {
+							wallet_balance.innerHTML = `₹ ${res.balance}`
+						}
+					})
+					.catch((err) => {
+						location.href = "http://localhost:3000/users/signin";
+					})
+			}
+
+
+
+
+		</script>
+		<%- include('includes/users/footer') %>

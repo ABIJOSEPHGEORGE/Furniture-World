@@ -1,0 +1,220 @@
+<%- include('includes/users/head') %>
+  <%- include('includes/users/header') %>
+    <!-- breadcrumb start-->
+    <section class="breadcrumb breadcrumb_bg">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="breadcrumb_iner">
+              <div class="breadcrumb_iner_item">
+                <h2>Order</h2>
+                <p>Home <span>-</span>Order-details</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="h-100 gradient-custom">
+      <div class="container-fluid py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-lg-10 col-xl-8">
+            <div class="card " style="border:none">
+              <div class="card-header bg-white px-4 py-5">
+                <h5 class="text-muted mb-0">Thanks for your Order, <span
+                    style="color: #f13d80;"><%-order.userId.first_name%></span>!</h5>
+
+              </div>
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <p class="lead fw-normal mb-0" style="color: #f13d80;">Receipt</p>
+                  <p class="small text-muted mb-0">Order NO. : <%-order._id%></p>
+                </div>
+                <%order.products.forEach((prdct)=>{%>
+                  <div class="card shadow-0 border mb-4">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-2 col-12 text-center">
+                          <img src="<%-prdct.item.images[0].URL%>" class="img-fluid w-50" alt="Phone">
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0" style="font-size: 12px;text-align: start;">
+                            <%-prdct.item.product_name%></p>
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0 small">Qty: <%-prdct.qty%></p>
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0 small">₹<%-prdct.totalPrice%></p>
+                        </div>
+                      </div>
+                      <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                      <div class="row d-flex align-items-center">
+                        <div class="col-md-2">
+                          <p class="text-muted mb-0 small">Track Order</p>
+                        </div>
+                        <div class="col-md-10">
+                          <div class="progress" style="height: 6px; border-radius: 16px;">
+                            <div class="progress-bar-<%-prdct.item._id%>" role="progressbar"
+                              style="width: 10%; border-radius: 16px; background-color: #f13d80;" aria-valuenow="65"
+                              aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                          <div class="d-flex justify-content-around mb-1">
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Placed</p>
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Processing</p>
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Shipped</p>
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for Delivery</p>
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <script>
+
+                    if ('<%-order.status%>' === "processing") {
+                      document.querySelector(`.progress-bar-${'<%-prdct.item._id%>'}`).style.width = "30%"
+                    } else if ('<%-order.status%>' === "shipped") {
+                      document.querySelector(`.progress-bar-${'<%-prdct.item._id%>'}`).style.width = "50%"
+                    } else if ('<%-order.status%>' === "out_for_delivery") {
+                      document.querySelector(`.progress-bar-${'<%-prdct.item._id%>'}`).style.width = "70%"
+                    } else if ('<%-order.status%>' === "delivered") {
+                      document.querySelector(`.progress-bar-${'<%-prdct.item._id%>'}`).style.width = "100%"
+                    } else if ('<%-order.status%>' === "canceled" || '<%-order.status%>' === "returned") {
+                      document.querySelector(`.progress-bar-${'<%-prdct.item._id%>'}`).style.width = "100%";
+                      document.querySelector(`.progress-bar-${'<%-prdct.item._id%>'}`).style.backgroundColor = "red";
+                    }
+                  </script>
+
+                  <%})%>
+
+                    <div class="d-flex justify-content-between pt-2">
+                      <p class="text-muted mb-0">Order Number : <%-order._id%></p>
+                      <%if(order.coupon_discount){%>
+                        <p class="text-muted mb-0"><span class="fw-bold me-4">Coupon Discount</span>
+                          ₹<%-order.coupon_discount%></p>
+                        <%}%>
+
+                          <%if(order.wallet_discount){%>
+                            <p class="text-muted mb-0"><span class="fw-bold me-4">Wallet Discount</span>
+                              ₹<%-order.wallet_discount%></p>
+                            <%}%>
+                    </div>
+
+                    <div class="d-flex justify-content-between pt-2">
+                      <p class="text-muted fw-bold mb-0"><span class="fw-bold me-4">Payment Method : </span>
+                        <%-order.payment_method%></p>
+                      <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> ₹<%-order.bill_amount%></p>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center align-items-start" id="action-container">
+                      <p class="text-muted">Order Status :
+                        <%-order.status.charAt(0).toUpperCase()+order.status.substring(1).replaceAll("_"," ")%></p>
+                
+              </div>
+              
+            </div>
+            <div class=" card-footer border-0 px-4 py-5"
+                          style="background-color: #f13d80; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                          <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
+                            paid: <span class="h2 mb-0 ms-2"> ₹<%-order.bill_amount%></span></h5>
+                    </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <script>
+      const order_action = document.getElementById('order-action');
+      const order_status = '<%-order.status%>';
+      const action_container = document.getElementById('action-container');
+      const order_id = '<%-order._id%>'
+      if (order_status === "processing" || order_status === "shipped" || order_status === "out_for_delivery") {
+        let btn = `<button class="btn text-dark px-3 py-2 col-3" style="background-color: transparent;border: 2px solid #f13d80;" id="order-action" onclick="cancelOrder('${order_id}')">Cancel</button>`;
+        action_container.insertAdjacentHTML("afterend", btn);
+      } else if (order_status === "delivered") {
+        let btn = `<button class="btn text-dark px-3 py-2 col-3" style="background-color: transparent;border: 2px solid #f13d80;" id="order-action" onclick="returnOrder('${order_id}')">Return</button>`;
+        action_container.insertAdjacentHTML("afterend", btn);
+      }
+
+
+      function cancelOrder(id) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You want to cancel this order",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, Cancel!',
+          cancelButtonText: 'Back'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`http://localhost:3000/users/cancel-order/${id}`, {
+              method: "PUT"
+            })
+              .then((res) => {
+                return res.json()
+              })
+              .then((res) => {
+                if (res == true) {
+                  Swal.fire(
+                    'Canceled!',
+                    'Your order has canceled and refund credited to wallet.',
+                    'success'
+                  )
+                    .then((result) => {
+                      if (result.isConfirmed) {
+                        location.reload()
+                      }
+                    })
+                }
+              })
+          }
+        })
+          .catch((err) => {
+            location.href = "http://localhost:3000/users/signin";
+          })
+      }
+
+      function returnOrder(id) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You want to return this order",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, Return!',
+          cancelButtonText: 'Back'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`http://localhost:3000/users/return-order/${id}`, {
+              method: "PUT"
+            })
+              .then((res) => {
+                return res.json()
+              })
+              .then((res) => {
+                if (res == true) {
+                  Swal.fire(
+                    'Returned!',
+                    'Your return request has accepted and refund will be credited to wallet',
+                    'success'
+                  )
+                    .then((result) => {
+                      if (result.isConfirmed) {
+                        location.reload()
+                      }
+                    })
+                }
+              })
+          }
+        })
+          .catch((err) => {
+            location.href = "http://localhost:3000/users/signin";
+          })
+      }
+    </script>
+
+    <%- include('includes/users/footer') %>

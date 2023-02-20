@@ -1,0 +1,170 @@
+<%- include('includes/users/head') %>
+    <%- include('includes/users/header') %>
+        <!--================Home Banner Area =================-->
+        <!-- breadcrumb start-->
+        <section class="breadcrumb breadcrumb_bg">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="breadcrumb_iner">
+                            <div class="breadcrumb_iner_item">
+                                <h2>Wishlist</h2>
+                                <p>Home <span>-</span>wihslist</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- breadcrumb start-->
+
+        <div class="image-container w-100 d-none justify-content-center flex-column align-items-center" id="empty-page">
+            <img src="/img/Empty-pana.svg" class="w-25" alt="">
+            <h4 class="text-center">Wishlist is empty</h4>
+        </div>
+
+
+
+
+        <!--================wishlist Area =================-->
+        <section class="cart_area padding_top">
+            <div class="container">
+                <div class="cart_inner">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product Image</th>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wishlist-items">
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </section>
+
+
+
+
+
+        <script>
+            const empty_wishlist = document.getElementById('empty-page');
+            const wishlist_items = document.getElementById('wishlist-items');
+            const table = document.querySelector('table');
+
+            fetchWishlist()
+
+            function fetchWishlist() {
+                fetch("http://localhost:3000/users/wishlist", {
+                    method: "POST"
+                })
+                    .then((res) => {
+                        return res.json()
+                    })
+                    .then((res) => {
+                        if (res.items.length == 0) {
+                            empty_wishlist.classList.remove('d-none');
+                            empty_wishlist.classList.add('d-flex');
+                            table.classList.add('d-none');
+                        } else {
+                            res.items.forEach((item) => {
+
+                                let single_item = `
+                                        <tr>
+                                                <td>
+                                                <div class="media w-25">
+                                                    <a href="http://localhost:3000/users/view-product/${item._id}"><img src="${item.images[0].URL}" alt="Product image" class="w-75"></a>
+                                                </div>
+                                            </td>
+                                                
+                                                <td>${item.product_name}</td>
+                                                <td>₹${item.sale_price}</td>
+                                                <td>
+                                                 <div class="d-inline" style="cursor: pointer;" onclick="addToCart('${item._id}')"> Add to cart</div>
+                                                 <div class="d-inline" style="cursor: pointer;" onclick="removeWishlist('${item._id}')">Remove</div>
+                                                </td>
+                                              </tr>
+                                        <tr>
+                                       
+                                    `
+                                wishlist_items.insertAdjacentHTML("beforeend", single_item)
+                            })
+                        }
+                    })
+                    .catch((err) => {
+                        location.href = "http://localhost:3000/users/signin"
+                    })
+            }
+
+            function removeWishlist(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`http://localhost:3000/users/remove-wishlist-item/${id}`, {
+                            method: "PUT"
+                        })
+                            .then((response) => {
+                                return response.json()
+                            })
+                            .then((data) => {
+                                if (data == true) {
+                                    Swal.fire(
+                                        'Removed!',
+                                        'Item has been removed from wishlist.',
+                                        'success'
+                                    )
+                                    fetchWishlist()
+                                }
+                            })
+                    }
+
+                })
+                    .catch((err) => {
+
+                        window.location.href = "http://localhost:3000/users/signin";
+                    })
+
+            }
+
+            function addToCart(id) {
+                fetch(`http://localhost:3000/users//wishlist/add-to-cart/${id}`, {
+                    method: "PUT"
+                })
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((res) => {
+                        if (res == true) {
+                            Swal.fire(
+                                'Success!',
+                                'Item added to cart',
+                                'success'
+                            ).then((data) => {
+                                if (data.isConfirmed) {
+                                    location.href = "http://localhost:3000/users/cart"
+                                }
+                            })
+                        }
+                    })
+                    .catch((err) => {
+                        location.href = "http://localhost:3000/users/signin"
+                    })
+            }
+        </script>
+
+
+        <!--================End Cart Area =================-->
+        <%- include('includes/users/footer') %>

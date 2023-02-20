@@ -1,89 +1,101 @@
 <%- include('includes/admin/head') %>
-<%- include('includes/admin/header') %>
+    <%- include('includes/admin/header') %>
 
-<section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
-    <div class="bg-black">
-        <p class="text-white px-3 fw-bold py-3">Sub Category / Add Sub Category</p>
-    </div>
-    <div class="form-container d-flex flex-column justify-content-center align-items-center">
-        <p class="text-center text-white fw-bold fs-3">Add Sub Category</p>
-    </div>
-    <form action="/admin/add-sub-category" method="post" class="row col-12  px-4" enctype="multipart/form-data">
-        <div class="col-6">
-           
-                <div class="col-12">
-                    <p class="text-center text-white">Choose Image</p>
-                    <div class="col-12 bg-white p-2">
-                        <div class="d-flex flex-column justify-content-center align-items-center">
-                            <div class="preview-con1 w-75 d-none justify-content-center align-items-center flex-column">
-                               
-                                <img alt="" srcset="" id="preview-main1" class="w-75">
-                               
+        <section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
+            <div class="bg-black">
+                <p class="text-white px-3 fw-bold py-3">Sub Category / Add Sub Category</p>
+            </div>
+            <div class="form-container d-flex flex-column justify-content-center align-items-center">
+                <p class="text-center text-white fw-bold fs-3">Add Sub Category</p>
+            </div>
+            <form action="/admin/add-sub-category" method="post" class="row col-12  px-4" enctype="multipart/form-data">
+                <div class="col-6">
+
+                    <div class="col-12">
+                        <p class="text-center text-white">Choose Image</p>
+                        <div class="col-12 bg-white p-2">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <div
+                                    class="preview-con1 w-75 d-none justify-content-center align-items-center flex-column">
+
+                                    <img alt="" srcset="" id="preview-main1" class="w-75">
+
+                                </div>
+                                <label for="product-main1" class="bg-success p-2 text-white">Choose Image</label>
+                                <input type="file" id="product-main1" name="category_image"
+                                    onchange="validateImage(event,1)" class="d-none" required>
                             </div>
-                            <label for="product-main1" class="bg-success p-2 text-white">Choose Image</label>
-                            <input type="file" id="product-main1" name="category-image" onchange="validateImage(event,1)" class="d-none" required>
+
                         </div>
-                        
+                        <p id="error-msg1" class="text-danger text-center"></p>
                     </div>
-                    <p id="error-msg1" class="text-danger text-center"></p>
                 </div>
-        </div>
-        <div class="d-flex flex-column align-items-center col-6 px-3">
-            <div class="input-container d-flex flex-column col-12 py-1">
-                <label for="sub_category_name" class="text-white fw-bold fs-5 py-1">Sub Category Name</label>
-                <input type="text" name="sub_category_name" id="sub_category_name" class="rounded border-0 py-2 px-2" placeholder="SubCategory Name" required>
-            </div>
-            <div class="input-container d-flex flex-column col-12 py-1">
-                <label for="sub_category_description" class="text-white fw-bold fs-5 py-1">Description</label>
-                <input type="text" name="sub_category_description" id="sub_category_description" class="rounded border-0 py-2 px-2" placeholder="Description" required>
-            </div>
-            
-    
-            <!-- Parent Category Dropdown -->
-            
-            <div class="dropdown col-12 py-1">
-                <label class="text-white fw-bold fs-5 py-1">Parent Category</label>
-                <select class="btn btn-secondary bg-white text-dark border-0 dropdown-toggle col-12" name="parent_category" type="button" id="dropdownMenuButton" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <%category.forEach(category=>{%>
-                        <option class="dropdown-item" value="<%-category._id%>"><%-category.category_name%></option>
+                <div class="d-flex flex-column align-items-center col-6 px-3">
+                    <div class="input-container d-flex flex-column col-12 py-1">
+                        <label for="sub_category_name" class="text-white fw-bold fs-5 py-1">Sub Category Name</label>
+                        <input type="text" name="sub_category_name" id="sub_category_name"
+                            class="rounded border-0 py-2 px-2" placeholder="Sub Category Name" required>
+                    </div>
+                    <div class="input-container d-flex flex-column col-12 py-1">
+                        <label for="sub_category_description" class="text-white fw-bold fs-5 py-1">Description</label>
+                        <input type="text" name="sub_category_description" id="sub_category_description"
+                            class="rounded border-0 py-2 px-2" placeholder="Description" required>
+                    </div>
+
+
+                    <!-- Parent Category Dropdown -->
+
+                    <div class="dropdown col-12 py-1">
+                        <label class="text-white fw-bold fs-5 py-1">Parent Category</label>
+                        <select class="btn btn-secondary bg-white text-dark border-0 dropdown-toggle col-12"
+                            name="parent_category" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <%category.forEach(category=>{%>
+                                <option class="dropdown-item" value="<%-category._id%>">
+                                    <%-category.category_name.charAt(0).toUpperCase()+category.category_name.substring(1).replaceAll("-"," ")%></option>
                     <%})%>
                 </select>
                     
               </div>
           
             
-            <%if (typeof err!="undefined" && err) {%>
-                <p class="text-danger text-center"><%=err%></p>
-            <%}%>
-           
-        </div>
-       
-    
-    <div class="d-flex flex-row justify-content-center align-items-center col-12 py-2">
-        <button class="btn bg-white border-0 rounded mx-1 px-4 py-2"><a href="/admin/sub-category-managemnt" class="text-dark text-decoration-none">Cancel</a></button>
-        <button class="btn bg-success border-0 rounded mx-1 px-4 py-2 text-white" type="submit">Add Sub Category</button>
-   </div>
-</form>
-</section>
+            <%if (typeof err!=" undefined" && err) {%>
+                                        <p class="text-danger text-center">
+                                            <%=err%>
+                                        </p>
+                                        <%}%>
 
-<script>
-    function validateImage(evt,id){
-                    
-                    const preview_main = document.getElementById(`preview-main${id}`);
-                    const product_main = document.getElementById(`product-main${id}`);
-                    const file_name = product_main.value;
-                   
-                    let dot = file_name.lastIndexOf(".")+1;
-                    let ext = file_name.substr(dot,file_name.length)
-                    console.log(ext);
-                    if(ext!="png" && ext!="jpg" && ext!="jpeg"){
-                        document.getElementById(`error-msg${id}`).innerText = "Only png,jpeg,jpg images are supported";
-                    }else{
-                        document.querySelector(`.preview-con${id}`).classList.remove('d-none');
-                        document.querySelector(`.preview-con${id}`).classList.add('d-flex');
-                        preview_main.src=URL.createObjectURL(evt.target.files[0]);
-                    }
+                    </div>
+
+
+                    <div class="d-flex flex-row justify-content-center align-items-center col-12 py-2">
+                        <button class="btn bg-white border-0 rounded mx-1 px-4 py-2"><a
+                                href="/admin/sub-category-management"
+                                class="text-dark text-decoration-none">Cancel</a></button>
+                        <button class="btn bg-success border-0 rounded mx-1 px-4 py-2 text-white" type="submit">Add Sub
+                            Category</button>
+                    </div>
+            </form>
+        </section>
+
+        <script>
+            function validateImage(evt, id) {
+
+                const preview_main = document.getElementById(`preview-main${id}`);
+                const product_main = document.getElementById(`product-main${id}`);
+                const file_name = product_main.value;
+
+                let dot = file_name.lastIndexOf(".") + 1;
+                let ext = file_name.substr(dot, file_name.length)
+
+                if (ext != "png" && ext != "jpg" && ext != "jpeg") {
+                    document.getElementById(`error-msg${id}`).innerText = "Only png,jpeg,jpg images are supported";
+                } else {
+                    document.querySelector(`.preview-con${id}`).classList.remove('d-none');
+                    document.querySelector(`.preview-con${id}`).classList.add('d-flex');
+                    preview_main.src = URL.createObjectURL(evt.target.files[0]);
                 }
-</script>
+            }
+        </script>
 
-<%- include('includes/admin/footer') %>
+        <%- include('includes/admin/footer') %>

@@ -1,0 +1,221 @@
+<%- include('includes/admin/head') %>
+    <%- include('includes/admin/header') %>
+
+        <div class="container mt-5 mb-5">
+
+            <div class="row d-flex justify-content-center">
+
+                <div class="col-md-8">
+
+                    <div class="card bg-white" id="content">
+
+
+                        <div class="text-left logo p-2 px-5">
+
+                            <img src="/img/main-logo.png" width="100">
+
+
+                        </div>
+
+                        <div class="invoice p-5">
+
+                            <h5>Your order Confirmed!</h5>
+
+                            <span class="font-weight-bold d-block mt-4"><%-order.billing_address.first_name%>
+                                    <%-order.billing_address.last_name%></span>
+
+                            <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
+
+                                <table class="table table-borderless">
+
+                                    <tbody>
+
+                                        <tr class="col-12">
+                                            <td class="col-4">
+                                                <div class="py-2">
+
+                                                    <span class="d-block text-muted">Order Date</span>
+                                                    <span><%-order.order_date.toISOString().slice(0,10)%></span>
+
+                                                </div>
+                                            </td>
+
+                                            <td class="col-4">
+                                                <div class="py-2">
+
+                                                    <span class="d-block text-muted">Order No</span>
+                                                    <span><%-order._id%></span>
+
+                                                </div>
+                                            </td>
+                                            <td class="col-4">
+                                                <div class="py-2">
+
+                                                    <span class="d-block text-muted">Payment</span>
+                                                    <span><%-order.payment_method%></span>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="col-12">
+                                                <div class="py-2">
+
+                                                    <span class="d-block text-muted">Shiping Address</span>
+                                                    <span><%-order.billing_address.add_one%>,<%-order.billing_address.add_two%><br><%-order.billing_address.city%><br><%-order.billing_address.zip%></span>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                            <div class="product border-bottom table-responsive">
+
+                                <table class="table table-borderless">
+
+                                    <tbody>
+                                        <%order.products.forEach((prdct)=>{%>
+                                            <tr>
+                                                <td width="20%">
+
+                                                    <img src="<%-prdct.item.images[0].URL%>" width="90">
+
+                                                </td>
+
+                                                <td width="60%">
+                                                    <span class="font-weight-bold"><%-prdct.item.product_name%></span>
+                                                    <div class="product-qty">
+                                                        <span class="d-block">Quantity:<%-prdct.qty%></span>
+                                                        <span>Color:Dark</span>
+
+                                                    </div>
+                                                </td>
+                                                <td width="20%">
+                                                    <div class="text-right">
+                                                        <span
+                                                            class="font-weight-bold">₹<%-prdct.item.sale_price%></span>
+                                                    </div>
+                                                </td>
+                                                <td width="20%">
+                                                    <div class="text-right">
+                                                        <span
+                                                            class="font-weight-bold">₹<%-prdct.item.sale_price*prdct.qty%></span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <%})%>
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                            <div class="row d-flex justify-content-end">
+
+                                <div class="col-md-5">
+
+                                    <table class="table table-borderless">
+
+                                        <tbody class="totals">
+
+                                            <tr>
+                                                <%if(order.coupon_discount){%>
+                                                    <td>
+                                                        <div class="text-left">
+
+                                                            <span class="text-muted">Coupon Discount</span>
+
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="text-right">
+                                                            <span
+                                                                class="text-success">₹<%-order.coupon_discount%></span>
+                                                        </div>
+                                                    </td>
+                                                    <%}%>
+                                                        <%if(order.wallet_discount){%>
+                                                            <td>
+                                                                <div class="text-left">
+
+                                                                    <span class="text-muted">Wallet Discount</span>
+
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="text-right">
+                                                                    <span
+                                                                        class="text-success">₹<%-order.wallet_discount%></span>
+                                                                </div>
+                                                            </td>
+                                                            <%}%>
+                                            </tr>
+
+
+                                            <tr class="border-top border-bottom">
+                                                <td>
+                                                    <div class="text-left">
+
+                                                        <span class="font-weight-bold">Total Paid</span>
+
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="text-right">
+                                                        <span class="font-weight-bold">₹<%-order.bill_amount%></span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row p-5 justify-content-end">
+                            <div class="col-6 text-end">
+                                <button class="btn text-dark" onclick="printPdf()">Print Invoice</button>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <script>
+
+
+            function printPdf() {
+
+                var printContents = document.getElementById('content').innerHTML;
+                var originalContents = document.body.innerHTML;
+
+                document.body.innerHTML = printContents;
+
+                window.print();
+
+                document.body.innerHTML = originalContents;
+
+            }
+
+        </script>
+
+        <%- include('includes/admin/footer') %>

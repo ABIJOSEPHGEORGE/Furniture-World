@@ -136,3 +136,6 @@
       padding:5px 40px;
     } 
     
+    .cup{
+        cursor: pointer;
+    }

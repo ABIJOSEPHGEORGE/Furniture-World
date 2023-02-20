@@ -1,0 +1,34 @@
+<%- include('includes/admin/head') %>
+    <%- include('includes/admin/header') %>
+
+
+        <div class="container p-5">
+            <h1 class="fs-5 text-white">Sales Report Download</h1>
+            <form action="/admin/sales-report" method="post">
+                <div class="form-group py-2">
+                    <label for="fromDate" class="text-white py-1">From Date:</label>
+                    <input type="date" class="form-control text-white" id="fromDate" name="fromDate">
+                </div>
+                <div class="form-group py-2">
+                    <label for="toDate" class="text-white py-1">To Date:</label>
+                    <input type="date" class="form-control text-white" id="toDate" name="toDate">
+                </div>
+                <div class="form-group py-2">
+                    <label for="status" class="text-white py-1">Select Option:</label>
+                    <select class="form-control text-white" id="status" name="status">
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="out_for_delivery">Out For Delivery</option>
+                        <option value="cancel">Cancel</option>
+                        <option value="return">Return</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="refunded">Refunded</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn bg-dark text-white">Download</button>
+            </form>
+        </div>
+
+
+        <%- include('includes/admin/footer') %>

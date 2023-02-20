@@ -1,141 +1,159 @@
-const { compare } = require("bcrypt");
-const { default: mongoose } = require("mongoose");
 const Category = require("../../models/category-schema");
 const Product = require("../../models/products-schema");
-const SubCategory = require("../../models/sub-category");
 const User = require("../../models/users-schema");
 
 module.exports = {
   sortProducts: async (req, res) => {
-    let categoryId = req.params.id;
-    let subcategory = req.query.sub || "All";
-    const page = req.query.p || 1;
-    const productPerPage = 3;
+    try {
+      const category = await Category.findOne({ category_name: req.params.id });
+      if (!category) {
+        return res.status(404).json({ status: false });
+      }
+      const all_sub_categories = category.sub_category;
+      const search_key = req.query.search_key;
+      let page;
+      if (req.query.p == "undefined" || req.query.p == undefined) {
+        page = 1;
+      } else {
+        page = parseInt(req.query.p);
+      }
+      const productPerPage = 4;
+      let sort;
+      if (req.query.sort == "undefined" || req.query.sort == undefined) {
+        sort = 1;
+      } else {
+        sort = parseInt(req.query.sort);
+      }
 
-    //fetching all subcategories under category
-    let allSubCategories = await sortSubCategories(categoryId);
+      let [products, totalProducts] = await fetchProducts(
+        req.query.sub,
+        category._id,
+        page,
+        productPerPage,
+        req.query.price,
+        sort,
+        search_key
+      );
 
-    let [products, totalProducts] = await fetchProducts(subcategory,categoryId,page,productPerPage);
-    
-    //checking if the products exist in wishlist
-    let wishlistProducts = await existInWishlist(products,req.session.user);
-    console.log(wishlistProducts)
+      let wishlistProducts = await existInWishlist(products, req.session.user);
 
-    res.render("shop-page", {
-      products: wishlistProducts,
-      allSubCategories: allSubCategories,
-      totalProducts: totalProducts.totalCount,
-      currentPage:page,
-      hasNextPage : productPerPage*page<totalProducts.totalCount,
-      nextPage : page+1,
-      lastPage : Math.ceil(totalProducts/productPerPage)
-    });
+      if (totalProducts == undefined) {
+        return res.json(false);
+      } else {
+        let response = {
+          category: req.params.id,
+          products: wishlistProducts,
+          allSubCategories: all_sub_categories,
+          totalProducts: totalProducts,
+          currentPage: page,
+          hasNextPage: productPerPage * page < totalProducts.totalCount,
+          nextPage: parseInt(page) + 1,
+          lastPage: Math.ceil(totalProducts.totalCount / productPerPage),
+        };
+
+        res.status(200).json(response);
+      }
+    } catch (err) {
+      res.redirect("/users/page-not-found");
+    }
   },
 };
 
-// sortSubCategories = (categoryId) => {
-//   try {
-//     let responses = Category.findById(categoryId).populate({
-//       path: "sub_category",
-//       select: ["_id", "sub_category_name"],
-//     });
-//     if (responses) return responses;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
-
-// fetchProducts = async (subcatId, categoryId, page,productPerPage,req) => {
-  
-//   const skip = (page-1)*productPerPage;
-//   let subcategories = await sortSubCategories(categoryId);
-//   let subcategoryIds = await subcategories.sub_category.map((values) => {
-//     return values._id;
-//   });
-//   subcatId != "All" ? subcatId.toString() : subcatId;
-//   let categoryFilter;
-//   let statusFilter = { status:true };
-//   subcatId == "All"
-//     ? (categoryFilter = { sub_category: { $in: subcategoryIds } })
-//     : (categoryFilter = {
-//         sub_category: { $in: [mongoose.Types.ObjectId(subcatId)] },
-//       });
-//   let products = await Product.aggregate([
-//     { $match: { $and: [categoryFilter,statusFilter] } },
-//     { $skip: skip },
-//     { $limit: productPerPage },
-//   ]);
-//   let totalCount = await Product.aggregate([
-//     { $match: { $and: [categoryFilter, statusFilter] } },
-//     { $count: "totalCount" },
-//   ]);
-//   const totalProducts = totalCount.find((obj) => {
-//     return obj;
-//   });
- 
-  
-//   return [products, totalProducts];
-// };
-
-
-async function sortSubCategories(categoryId) {
-  try {
-    const category = await Category.findById(categoryId).populate({
-      path: "sub_category",
-      select: ["_id", "sub_category_name"],
-    });
-    return category;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-
-fetchProducts = async (subcatId, categoryId, page, productPerPage, req) => {
-  const skip = (page - 1) * productPerPage;
-  let subcategories = await sortSubCategories(categoryId);
-  let subcategoryIds = subcategories.sub_category.map((values) => values._id);
-  const subcatIdObjectId = subcatId !== "All" ? mongoose.Types.ObjectId(subcatId) : subcatId;
+fetchProducts = async (
+  subcategory_name,
+  categoryId,
+  page,
+  productPerPage,
+  price,
+  sort,
+  search_key
+) => {
   let categoryFilter;
   let statusFilter = { status: true };
-  subcatId === "All"
-    ? (categoryFilter = { sub_category: { $in: subcategoryIds } })
-    : (categoryFilter = { sub_category: { $in: [subcatIdObjectId] } });
-  let products = await Product.aggregate([
-    { $match: { $and: [categoryFilter, statusFilter] } },
-    { $skip: skip },
-    { $limit: productPerPage },
-  ]);
-  let totalCount = await Product.aggregate([
-    { $match: { $and: [categoryFilter, statusFilter] } },
-    { $count: "totalCount" },
-  ]);
-  const totalProducts = totalCount.find((obj) => obj);
-  return [products, totalProducts];
+  let priceFilter;
+  if (price === "undefined" || price === undefined) {
+    priceFilter = {};
+  } else {
+    let priceGreater = parseInt(price.split("-")[0]);
+    let priceLess = parseInt(price.split("-")[1]);
+    !priceLess
+      ? (priceFilter = { sale_price: { $gt: priceGreater } })
+      : (priceFilter = { sale_price: { $gt: priceGreater, $lt: priceLess } });
+  }
+
+  let searchFilter = {};
+  if (search_key !== "null") {
+    searchFilter = {
+      $or: [{ product_name: { $regex: String(search_key), $options: "i" } }],
+    };
+  }
+
+  parentCatFilter = { parent_category: categoryId };
+  subcategory_name == "undefined" ||
+  subcategory_name == undefined ||
+  subcategory_name === "All"
+    ? (categoryFilter = {})
+    : (categoryFilter = { sub_category: subcategory_name });
+
+  try {
+    let products = await Product.aggregate([
+      {
+        $match: {
+          $and: [
+            categoryFilter,
+            parentCatFilter,
+            statusFilter,
+            priceFilter,
+            searchFilter,
+          ],
+        },
+      },
+      { $sort: { sale_price: sort } },
+      { $skip: (page - 1) * productPerPage },
+
+      { $limit: productPerPage },
+    ]);
+    let totalCount = await Product.aggregate([
+      {
+        $match: {
+          $and: [
+            categoryFilter,
+            parentCatFilter,
+            statusFilter,
+            priceFilter,
+            searchFilter,
+          ],
+        },
+      },
+      { $count: "totalCount" },
+    ]);
+    const totalProducts = totalCount.find((obj) => {
+      return obj;
+    });
+    return [products, totalProducts];
+  } catch (err) {
+    res.redirect("/users/page-not-found");
+  }
 };
 
-async function existInWishlist (products,email){
-  if(typeof email === "undefined"){
+async function existInWishlist(products, email) {
+  if (typeof email === "undefined") {
     return products;
-  }else{
-        try{
-          let user = await User.findOne({email:email});
-          let wishlist = user.wishlist;
-          products = products.map(product => {
-            if(wishlist.includes(product._id)){
-              product.wishlist = true;
-            }else{
-              product.wishlist = false
-            }
-            return product
-          })
-          return products;
-      }catch(err){
-          console.error(err);
-      }
+  } else {
+    try {
+      let user = await User.findOne({ email: email });
+      let wishlist = user.wishlist;
+      products = products.map((product) => {
+        if (wishlist.includes(product._id)) {
+          product.wishlist = true;
+        } else {
+          product.wishlist = false;
+        }
+        return product;
+      });
+      return products;
+    } catch (err) {
+      console.error(err);
+    }
   }
-  
 }
-
-
-

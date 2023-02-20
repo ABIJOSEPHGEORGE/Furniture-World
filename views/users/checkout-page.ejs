@@ -1,0 +1,920 @@
+<%- include('includes/users/head') %>
+  <%- include('includes/users/header') %>
+    <!--================Home Banner Area =================-->
+    <!-- breadcrumb start-->
+    <section class="breadcrumb breadcrumb_bg">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="breadcrumb_iner">
+              <div class="breadcrumb_iner_item">
+                <h2>Checkout</h2>
+                <p>Home <span>-</span>Checkout</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- breadcrumb end-->
+
+    <!--================Checkout Area =================-->
+    <section class="checkout_area padding_top">
+      <div class="container">
+
+        <div class="cupon_area">
+          <div class="check_title">
+            <h2>
+              Have a coupon?
+            </h2>
+          </div>
+
+          <!-- coupon goes here -->
+          <form id="couponForm">
+            <input type="text" id="coupon_input" name="couponName" placeholder="Enter coupon code"
+              class="mt-2 mb-0 mx-0" required />
+            <p class="text-danger" id="err-msg"></p>
+            <button class="tp_btn mt-2 ms-0" type="submit" id="apply-coupon">Apply Coupon</button>
+          </form>
+          <button class="tp_btn mt-2 ms-0 d-none" id="clear-coupon" onclick="clearCoupon()">Clear Coupon</button>
+        </div>
+
+
+
+        <div class="billing_details">
+          <div class="row">
+            <div class="col-lg-8">
+
+              <!-- saved address area -->
+              <div class="container py-3 text-center">
+                <div class="row" style="background-color:#ecfdff;">
+                  <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center p-3 bg-black text-white">
+                      <h5 class="mb-0">Select Address</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" id="select_address">
+
+                </div>
+                <button class="tp_btn mt-2 ms-0 " id="add_addrs">Add New Address</button>
+              </div>
+
+              <!-- <h3>Shipping Details</h3> -->
+              <form class="row contact_form" id="checkout-form">
+                <div class="address-block row d-none">
+
+                </div>
+
+                <!-- form -->
+            </div>
+
+            <div class="col-lg-4">
+              <!-- Wallet Goes here -->
+              <div class="wallet-container">
+                <div class="check_title">
+                  <h2>
+                    Wallet
+                  </h2>
+                </div>
+
+                <div class="four col-md-12 my-2">
+                  <div class="wallet-counter-box colored  py-2 px-2 " style="background-color: #ecfdff !important;">
+                    <i class="fa-solid fa-wallet text-dark"></i>
+                    <p class="text-dark">Wallet Balance</p>
+                    <p id="wallet-balance" class="text-dark"></p>
+                    <div id="wallet-wrapper" class="text-center py-2">
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="order_box">
+                <h2>Your Order</h2>
+                <ul class="list">
+                  <li>
+                    <a href="#">Product
+                      <span>Total</span>
+                    </a>
+                  </li>
+                  <ul id="product_details">
+
+                  </ul>
+
+
+
+                </ul>
+                <ul class="list list_2">
+                  <li>
+                    <a href="#">Total
+                      <span id="total"></span>
+                    </a>
+                  </li>
+                  <!-- if coupon show this -->
+                  <li>
+                    <a href="#">Coupon :
+                      <span id="applied_coupon">No coupon applied</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="coupon-dis d-none">Coupon Discount:
+                      <span id="coupon-disamount">0</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="wallet-dis d-none">Wallet Balance Applied:
+                      <span id="wallet-disamount">0</span>
+                    </a>
+                  </li>
+
+
+
+                  <li>
+                    <a href="#">Sub Total
+                      <span id="sub_total"></span>
+                    </a>
+                  </li>
+                </ul>
+
+
+                <div class="payment_methods">
+                  <div class="payment_item cod-payment">
+                    <div class="radion_btn">
+                      <input type="radio" id="f-option5" class="cod-btn" name="payment" value="cod" />
+                      <label for="f-option5">COD</label>
+                      <div class="check"></div>
+                    </div>
+
+                  </div>
+                  <div class="payment_item online-payment active">
+                    <div class="radion_btn">
+                      <input type="radio" id="f-option6" class="online-payment" name="payment" value="online" checked />
+                      <label for="f-option6">Razorpay</label>
+                      <img src="img/product/single-product/card.jpg" alt="" />
+                      <div class="check"></div>
+                    </div>
+
+                  </div>
+                  <div class="payment_item active wallet-payment d-none">
+                    <div class="radion_btn">
+                      <input type="radio" id="f-option7" class="wallet-payment" name="payment" value="wallet" checked />
+                      <label for="f-option7">Wallet</label>
+                      <img src="img/product/single-product/card.jpg" alt="" />
+                      <div class="check"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="btn_3" id="payment-btn" type="submit">Proceed to pay</button>
+              </div>
+              <!-- stock alert -->
+              <div class="alert alert-warning d-none" id="stock-msg" role="alert">
+                <p class="warning_msg"></p>
+                <div class="action-btn d-flex">
+                  <a class="primary_action border-0 py-3 px-4 bg-transparent" style="cursor:pointer"></a>
+                  <a class="secondary_action border-0 py-3 px-4 bg-transparent" style="cursor:pointer"></a>
+                </div>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--================End Checkout Area =================-->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+
+      const product_details = document.getElementById('product_details');
+      const sub_total = document.getElementById('sub_total');
+      const total = document.getElementById('total');
+      let coupon_form = document.getElementById('couponForm');
+      const coupon_input = document.getElementById('coupon_input');
+      const apply_coupon = document.getElementById('apply-coupon');
+      let errMsg = document.getElementById('err-msg');
+      const coupon_discount = document.querySelector('.coupon-dis');
+      const applied_coupon = document.getElementById('applied_coupon');
+      const coupon_amount = document.getElementById('coupon-disamount');
+      const clear_coupon = document.getElementById('clear-coupon');
+      const checkout_form = document.getElementById('checkout-form');
+      const stock_msg = document.getElementById('stock-msg');
+      const warning_msg = document.querySelector('.warning_msg');
+      const primary_action = document.querySelector('.primary_action');
+      const secondary_action = document.querySelector('.secondary_action');
+      const payment_btn = document.getElementById('payment-btn');
+      const add_address = document.getElementById('add_addrs');
+      const select_address = document.getElementById('select_address');
+      const address_block = document.querySelector('.address-block');
+      const wallet_balance = document.getElementById('wallet-balance');
+      const wallet_wrapper = document.getElementById('wallet-wrapper');
+      const wallet_discount = document.querySelector('.wallet-dis');
+      const wallet_discount_amount = document.getElementById('wallet-disamount');
+      const payment_methods = document.querySelector('.payment_methods');
+      let sub_total_amount;
+
+
+      fetchItems();
+      stockChecking();
+      fetchAllAdress();
+      walletBalance();
+      // fetching the cart items and total
+      function fetchItems() {
+        fetch('http://localhost:3000/users/checkout', {
+          method: "POST"
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            if (data.products.length === 0) {
+              return window.location.href = "http://localhost:3000/users/cart"
+            } else {
+              data.products.forEach((ele) => {
+                let details = `
+            <li>
+              <a class="d-flex flex-column">
+              <span>${ele.item.product_name}</span>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="">x ${ele.qty}</span>
+                <span class="last">₹ ${ele.totalPrice}</span>
+              </div>
+              </a>
+            </li>
+            `
+                product_details.insertAdjacentHTML("beforeend", details);
+              })
+              total.innerText = `₹ ${data.subTotal}`;
+              sub_total.innerText = `₹ ${data.subTotal}`;
+              sub_total_amount = data.subTotal;
+
+            }
+
+          })
+
+      }
+
+      // applying coupon
+      coupon_form.addEventListener("submit", event => {
+        event.preventDefault();
+
+        let formData = new FormData(coupon_form);
+        let data = Object.fromEntries(formData);
+
+
+        applyCoupon(data);
+      })
+
+      function applyCoupon(data) {
+        let couponName = data.couponName;
+
+        fetch(`http://localhost:3000/users/apply-coupon/${couponName}`, {
+          method: "POST"
+        })
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+            if (res.status == false) {
+              errMsg.innerText = res.msg;
+            } else {
+              applied_coupon.innerHTML = `${res.couponName}`;
+              coupon_amount.innerHTML = `₹  ${res.couponDiscount}`;
+              sub_total.innerHTML = `₹ ${res.subTotal}`;
+              sub_total_amount = res.subTotal;
+              coupon_discount.classList.remove('d-none');
+              apply_coupon.classList.add('d-none');
+              clear_coupon.classList.remove('d-none');
+              errMsg.innerHTML = `Coupon Applied! Successfully`;
+              errMsg.classList.remove('text-danger');
+              errMsg.classList.add('text-success')
+            }
+          })
+          .catch((err) => {
+            window.location.href = "http://localhost/users/cart";
+          })
+      }
+
+      // clear coupon
+      function clearCoupon() {
+        fetch(`http://localhost:3000/users/clear-coupon/${coupon_input.value}`, {
+          method: "POST"
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((res) => {
+            if (res.status == false) {
+              return window.location.href = "http://localhost:3000/users/signin";
+            }
+            sub_total.innerHTML = "₹" + `${res.subTotal}`;
+            sub_total_amount = res.subTotal;
+            coupon_input.value = ""
+            coupon_discount.classList.add('d-none');
+            apply_coupon.classList.remove('d-none');
+            applied_coupon.innerHTML = "No Coupon Applied"
+            clear_coupon.classList.add('d-none');
+            coupon_amount.innerHTML = `₹ ${res.couponDis}`
+            errMsg.innerText = "";
+            errMsg.classList.add('text-danger');
+            errMsg.classList.remove('text-success')
+          })
+          .catch((err) => {
+
+            window.location.href = "http://localhost:3000/users/signin";
+          })
+      }
+
+
+      //checkout and payment
+      checkout_form.addEventListener("submit", event => {
+        event.preventDefault();
+
+        let formData = new FormData(checkout_form);
+        let data = Object.fromEntries(formData);
+
+        if (address_block.classList.contains('d-none')) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please select or add new address',
+          })
+        }
+
+        if (data.payment === "online" && !address_block.classList.contains('d-none')) {
+          // getting the order id
+          fetch(`http://localhost:3000/users/checkout/create-order/${sub_total_amount}`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: new Headers({
+              'Content-Type': 'application/json; charset=UTF-8'
+            })
+          }
+          )
+            .then((res) => {
+              return res.json()
+            })
+            .then((res) => {
+              var options = {
+                "key": "rzp_test_8emA6zzli6nGP1",
+                "amount": sub_total_amount * 100,
+                "currency": "INR",
+                "name": "Furniture World",
+                "description": "Test Transaction",
+                "image": "/img/main-logo.png",
+                "order_id": res.orderId,
+                "callback_url": `http://localhost:3000/users/order-confirmation/${res.dbOrderId}`,
+                "theme": {
+                  "color": "#ff3368"
+                }
+              };
+              var rzp1 = new Razorpay(options);
+              rzp1.open();
+              event.preventDefault();
+            })
+            .catch((err) => {
+              window.location.href = "http://localhost:3000/users/signin";
+            })
+        } else if (data.payment === "cod" || data.payment === "wallet" && !address_block.classList.contains('d-none')) {
+          fetch(`http://localhost:3000/users/checkout/create-order/${sub_total_amount}`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: new Headers({
+              'Content-Type': 'application/json; charset=UTF-8'
+            })
+          }
+          )
+            .then((res) => {
+              return res.json()
+            })
+            .then((res) => {
+              location.href = `http://localhost:3000/users/cod-order-confirm/${res.status}`
+            })
+            .catch((err) => {
+              location.href = "http://localhost:3000/users/signin";
+            })
+        }
+
+      })
+
+      // product stock checking
+      function stockChecking() {
+        fetch("http://localhost:3000/users/stock-status", {
+          method: "POST"
+        })
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+            res.forEach((sts) => {
+              if (sts.status === false) {
+                stock_msg.classList.remove('d-none');
+                warning_msg.innerHTML = `${sts.msg}`;
+                primary_action.innerHTML = "Add to wishlist";
+                secondary_action.innerHTML = "Remove item";
+                payment_btn.classList.add('d-none')
+
+                primary_action.addEventListener('click', () => {
+                  fetch(`http://localhost:3000/users/add-to-wishlist/${sts.id}`)
+                    .then((res) => {
+                      return res.json()
+                    })
+                    .then((res) => {
+                      if (res === true) {
+                        let msg = "Added to wishlist"
+                        removeFrmCart(sts.id, msg);
+                      }
+                    })
+                    .catch((err) => {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong! Try after sometimes',
+                        timer: 2000,
+                        showConfirmButton: false
+                      })
+                        .then((res) => location.href = "http://localhost:3000/users/cart")
+                    })
+                })
+
+                secondary_action.addEventListener('click', () => {
+                  let msg = "Product removed";
+                  removeFrmCart(sts.id, msg);
+                })
+              }
+            })
+          })
+      }
+
+
+      function removeFrmCart(id, msg) {
+        fetch(`http://localhost:3000/users/remove-item/${id}`, {
+          method: "DELETE"
+        })
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+            Swal.fire({
+              icon: 'success',
+              title: msg,
+              timer: 2000,
+              showConfirmButton: false
+            })
+              .then((result) => {
+                location.href = "http://localhost:3000/users/checkout"
+              })
+          })
+      }
+
+
+      // multiple address
+      add_address.addEventListener('click', () => {
+        Swal.fire({
+          title: 'Add new address',
+          html: `
+        <div class="col-12">
+          <div class="row col-12 p-0 m-0">
+            <div class="col-12 col-lg-6 input-container">
+              <label for="first" id="form-label">First Name<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="first" name="first_name" placeholder="First Name" required>
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="last" id="form-label">Last Name<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="last" name="last_name" placeholder="Last Name" required>
+            </div>
+
+            <div class="col-12 input-container">
+              <label for="company" id="form-label">Company Name</label>
+              <input type="text" class="form-control my-2 mx-1" id="company" name="company_name" placeholder="Company name">
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="number" id="form-label">Mobile<span style="color: red;">*</span></label>
+              <input type="number" class="form-control my-2 mx-1" id="number" name="phone_number" placeholder="Mobile" required>
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="email" id="form-label">Email Address<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="email" name="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="col-12 input-container">
+              <label for="add1" id="form-label">Address Line 1<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="add1" name="address_one" placeholder="Address Line 1" required>
+            </div>
+
+            <div class="col-12 input-container">
+              <label for="add2" id="form-label">Address Line 2</label>
+              <input type="text" class="form-control my-2 mx-1" id="add2" name="address_two" placeholder="Address Line 2">
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="city" id="form-label">City<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="city" name="city" placeholder="City" required>
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="zip" id="form-label">Postcode/ZIP<span style="color: red;">*</span></label>
+              <input type="text" class="form-control my-2 mx-1" id="zip" name="zip" placeholder="Postcode/ZIP" required>
+            </div>
+
+            <div class="col-12 col-lg-6 input-container">
+              <label for="state" id="form-label">State<span style="color: red;">*</span></label>
+              <input type="text" class="form-control col-12  my-2 mx-1" id="state" name="state" placeholder="State" required>
+            </div>
+            <div class="col-12 col-lg-6 input-container">
+              <label for="country" id="form-label">Country<span style="color: red;">*</span></label>
+              <input type="text" class="form-control col-12  my-2 mx-1" id="country" name="country" placeholder="Country" required>
+            </div>
+          </div>
+        </div>
+            `
+          ,
+
+          showCancelButton: true,
+          focusConfirm: false,
+          confirmButtonColor: "#ff3368",
+          confirmButtonText: "Add address",
+          cancelButtonText: "Cancel",
+          preConfirm: () => {
+            const f_name = Swal.getPopup().querySelector('#first').value
+            const l_name = Swal.getPopup().querySelector('#last').value
+            const company = Swal.getPopup().querySelector('#company').value
+            const number = Swal.getPopup().querySelector('#number').value
+            const email = Swal.getPopup().querySelector('#email').value
+            const addOne = Swal.getPopup().querySelector('#add1').value
+            const addTwo = Swal.getPopup().querySelector('#add2').value
+            const city = Swal.getPopup().querySelector('#city').value
+            const zip = Swal.getPopup().querySelector('#zip').value
+            const state = Swal.getPopup().querySelector('#state').value
+            const country = Swal.getPopup().querySelector('#country').value
+
+
+            if (!first || !last || !number || !email || !addOne || !addTwo || !city || !state || !country) {
+              Swal.showValidationMessage(`All fields marked with * are required`)
+            }
+            return { f_name: f_name, l_name: l_name, company: company, number: number, email: email, addOne: addOne, addTwo: addTwo, city: city, zip: zip, state: state, country: country }
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            addNewAddrss(result.value)
+          }
+
+        })
+      })
+
+      function addNewAddrss(addr) {
+        fetch(`http://localhost:3000/users/add-new-address`,
+          {
+            method: "POST",
+            body: JSON.stringify(addr),
+            headers: new Headers({
+              'Content-Type': 'application/json; charset=UTF-8'
+            })
+          })
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+            if (res === true) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'New address added',
+              })
+              select_address.innerHTML = ""
+              fetchAllAdress()
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+              })
+            }
+          })
+          .catch((err) => {
+            location.href = "http://localhost:3000/users/signin"
+          })
+      }
+
+      function fetchAllAdress() {
+        fetch("http://localhost:3000/users/all-address")
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+            res.forEach((add) => {
+              let single_address = document.createElement('div');
+              single_address.classList.add('col-12');
+              single_address.classList.add('col-md-4')
+              single_address.classList.add('text-left');
+              single_address.style.backgroundColor = "#ECFDFF";
+              single_address.style.margin = "12px"
+              single_address.innerHTML =
+                `
+
+                <p>${add.f_name} ${add.l_name}</p>
+                <p>${add.number}, ${add.email}, ${add.company}</p>
+                <p>${add.addOne}, ${add.addTwo}, ${add.city}, ${add.state}, ${add.country}, ${add.zip}</p>
+                <div class="w-100 d-flex justify-content-between align-items-centere">
+                  <div class="w-50 d-flex align-items-center cup" onclick="editAdd('${add._id}')">
+                    <p class="fw-bold"> Edit </p>
+                    <span class="material-symbols-outlined">
+                    edit_note
+                    </span>
+                  </div>
+
+                  <div class="w-50 d-flex align-items-center cup" onclick="selectAddress('${add._id}')">
+                    <p class="fw-bold"> Select </p>
+                    <span class="material-symbols-outlined">
+                      done_all
+                    </span>
+                  </div>
+                </div>
+             
+          `
+              select_address.insertAdjacentElement("beforeend", single_address);
+            })
+
+          })
+      }
+
+
+      function editAdd(id) {
+        fetch(`http://localhost:3000/users/edit-address/${id}`)
+          .then((res) => {
+            return res.json();
+          })
+          .then((res) => {
+            if (res !== false) {
+              res.forEach((add) => {
+                Swal.fire({
+                  title: 'Edit address',
+                  html: `
+                  <div class="col-12">
+                    <div class="row col-12 p-0 m-0">
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="first" id="form-label">First Name<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="first" name="first_name" placeholder="First Name" value="${add.f_name}" required>
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="last" id="form-label">Last Name<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="last" name="last_name" placeholder="Last Name" value="${add.l_name}" required>
+                      </div>
+
+                      <div class="col-12 input-container">
+                        <label for="company" id="form-label">Company Name</label>
+                        <input type="text" class="form-control my-2 mx-1" id="company" name="company_name" placeholder="Company name" value="${add.company}">
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="number" id="form-label">Mobile<span style="color: red;">*</span></label>
+                        <input type="number" class="form-control my-2 mx-1" id="number" name="phone_number" placeholder="Mobile" value="${add.number}" required>
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="email" id="form-label">Email Address<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="email" name="email" placeholder="Email Address" value="${add.email}" required>
+                      </div>
+
+                      <div class="col-12 input-container">
+                        <label for="add1" id="form-label">Address Line 1<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="add1" name="address_one" placeholder="Address Line 1" value="${add.addOne}" required>
+                      </div>
+
+                      <div class="col-12 input-container">
+                        <label for="add2" id="form-label">Address Line 2</label>
+                        <input type="text" class="form-control my-2 mx-1" id="add2" name="address_two" placeholder="Address Line 2" value="${add.addTwo}">
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="city" id="form-label">City<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="city" name="city" placeholder="City" value="${add.city}" required>
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="zip" id="form-label">Postcode/ZIP<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control my-2 mx-1" id="zip" name="zip" placeholder="Postcode/ZIP" value="${add.zip}" required>
+                      </div>
+
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="state" id="form-label">State<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control col-12  my-2 mx-1" id="state" name="state" placeholder="State" value="${add.state}" required>
+                      </div>
+                      <div class="col-12 col-lg-6 input-container">
+                        <label for="country" id="form-label">Country<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control col-12  my-2 mx-1" id="country" name="country" placeholder="Country" value="${add.country}" required>
+                      </div>
+                    </div>
+                  </div>
+                      `
+                  ,
+
+
+                  showCancelButton: true,
+                  focusConfirm: false,
+                  confirmButtonColor: "#ff3368",
+                  confirmButtonText: "Update address",
+                  cancelButtonText: "Cancel",
+                  preConfirm: () => {
+                    const f_name = Swal.getPopup().querySelector('#first').value
+                    const l_name = Swal.getPopup().querySelector('#last').value
+                    const company = Swal.getPopup().querySelector('#company').value
+                    const number = Swal.getPopup().querySelector('#number').value
+                    const email = Swal.getPopup().querySelector('#email').value
+                    const addOne = Swal.getPopup().querySelector('#add1').value
+                    const addTwo = Swal.getPopup().querySelector('#add2').value
+                    const city = Swal.getPopup().querySelector('#city').value
+                    const zip = Swal.getPopup().querySelector('#zip').value
+                    const state = Swal.getPopup().querySelector('#state').value
+                    const country = Swal.getPopup().querySelector('#country').value
+
+
+                    if (!first || !last || !number || !email || !addOne || !addTwo || !city || !state || !country) {
+                      Swal.showValidationMessage(`All fields marked with * are required`)
+                    }
+                    return { id: add._id, f_name: f_name, l_name: l_name, company: company, number: number, email: email, addOne: addOne, addTwo: addTwo, city: city, zip: zip, state: state, country: country }
+                  }
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    updateAdd(result.value)
+                  }
+
+                })
+              })
+            }
+          })
+      }
+
+      // updating the address
+      function updateAdd(result) {
+        fetch(`http://localhost:3000/users/update-address/${result.id}`, {
+          method: "PUT",
+          body: JSON.stringify(result),
+          headers: new Headers({
+            'Content-Type': 'application/json; charset=UTF-8'
+          })
+        }).then((res) => {
+          return res.json()
+        })
+          .then((res) => {
+            if (res == true) {
+              select_address.innerHTML = ""
+              fetchAllAdress()
+              Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Address Updated',
+              })
+            }
+          })
+          .catch((err) => {
+            location.href = "http://localhost:3000/users/signin"
+          })
+      }
+
+      function selectAddress(id) {
+        fetch(`http://localhost:3000/users/edit-address/${id}`)
+          .then((res) => {
+            return res.json();
+          })
+          .then((res) => {
+            if (res !== false) {
+              res.forEach((add) => {
+                let address = `
+        <div class="col-md-6 form-group p_star">
+                <label for="first">First Name</label>
+                <input type="text" class="form-control" id="first" name="first_name" placeholder="First Name" required value="${add.f_name}" />
+              </div>
+              <div class="col-md-6 form-group p_star">
+                <label for="last">Last Name</label>
+                <input type="text" class="form-control" id="last" name="last_name" placeholder="Last Name" required value="${add.l_name}" />
+              </div>
+              <div class="col-md-12 form-group">
+                <label for="company">Company Name</label>
+                <input type="text" class="form-control" id="company" name="company_name" placeholder="Company name" value="${add.company}" />
+              </div>
+              <div class="col-md-6 form-group p_star">
+                <label for="number">Mobile</label>
+                <input type="text" class="form-control" id="number" name="phone_number" placeholder="Mobile" required value="${add.number}" />
+                
+              </div>
+              <div class="col-md-6 form-group p_star">
+                <label for="email">Email Address</label>
+                <input type="text" class="form-control" id="email" name="email" placeholder="Email Address" required value="${add.email}" />
+              
+              </div>
+            
+              <div class="col-md-12 form-group p_star">
+                <label for="add1">Address Line 1</label>
+                <input type="text" class="form-control" id="add1" name="address_one" placeholder="Address Line 1" required value="${add.addOne}"/>
+              </div>
+              <div class="col-md-12 form-group p_star">
+                <label for="add2">Address Line 2</label>
+                <input type="text" class="form-control" id="add2" name="address_two" placeholder="Address Line 2" value="${add.addTwo}"/>
+                
+              </div>
+              <div class="col-md-12 form-group p_star">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" name="city" placeholder="City" required value="${add.city}"/>
+              </div>
+              
+              <div class="col-md-12 form-group p_star">
+                <label for="zip">Enter Postcode/ZIP</label>
+                <input type="text" class="form-control" id="zip" name="zip" placeholder="Postcode/ZIP" required value="${add.zip}"/>
+                
+              </div>
+             
+              <div class="col-md-12 form-group p_star">
+                <label for="state">State</label>
+                <input type="text" class="form-control" id="state" name="state" placeholder="State" required value="${add.state}"/>
+               
+              </div>
+  
+              <div class="col-md-12 form-group p_star">
+                <label for="country">Country</label>
+                <input type="text" class="form-control" id="country" name="country" placeholder="Country" required value="${add.country}"/>
+              </div>
+        `
+                address_block.classList.remove('d-none');
+                address_block.innerHTML = ""
+                address_block.insertAdjacentHTML("beforeend", address);
+              })
+            }
+          })
+      }
+
+      // loading user wallet balance
+      function walletBalance() {
+        fetch("http://localhost:3000/users/wallet-balance")
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+            if (res !== false) {
+              wallet_balance.innerHTML = `₹ ${res.balance}`;
+              if (res.balance > 0) {
+                wallet_wrapper.innerHTML = ""
+                let apply_wallet = `<button class="p-3 text-white border-0 rounded-pill cup fw-bold" style="background-color:#ff3368" onclick="applyWalletBalance()" id="apply-wallet-btn">Apply Wallet Balance</button>`;
+                wallet_wrapper.insertAdjacentHTML("beforeend", apply_wallet)
+              }
+            }
+          })
+          .catch((err) => {
+            location.href = "http://localhost:3000/users/signin";
+          })
+      }
+
+      // applying wallet balance
+      function applyWalletBalance() {
+        fetch(`http://localhost:3000/users/apply-wallet-balance`, {
+          method: "POST"
+        })
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+            if (res !== false) {
+              sub_total.innerHTML = `₹ ${res.bill_amount}`;
+              sub_total_amount = res.bill_amount;
+              wallet_balance.innerHTML = `${res.wallet_balance - res.amount_applied}`
+              wallet_discount_amount.innerHTML = `₹ ${res.amount_applied}`
+              wallet_discount.classList.remove('d-none');
+              wallet_wrapper.innerHTML = ""
+              let apply_wallet = `<button class="p-3 text-white border-0 rounded-pill cup fw-bold" style="background-color:#ff3368"  id="apply-wallet-btn">Applied Successfully</button>`;
+              wallet_wrapper.insertAdjacentHTML("beforeend", apply_wallet);
+              if (res.bill_amount == 0) {
+
+                payment_btn.innerText = "complete purchase";
+                document.querySelector('.online-payment').classList.add('d-none');
+                document.querySelector('.cod-payment').classList.add('d-none');
+                document.querySelector('.wallet-payment').classList.remove('d-none');
+              }
+              Swal.fire(
+                'hola!',
+                'Wallet Balance Applied Successfully!',
+                'success'
+              )
+            }
+          })
+          .catch((err) => {
+            location.href = "http://localhost:3000/users/signin"
+          })
+      }
+
+    </script>
+
+    <script>
+      // Handling the Confirm form resubmission
+      if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+      }
+    </script>
+
+
+
+    <%- include('includes/users/footer') %>

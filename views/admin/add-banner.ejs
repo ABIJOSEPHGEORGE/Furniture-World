@@ -1,42 +1,54 @@
 <%- include('includes/admin/head') %>
-<%- include('includes/admin/header') %>
+    <%- include('includes/admin/header') %>
 
-<section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
-    <div class="bg-black">
-        <p class="text-white px-3 fw-bold py-3">Banner / Add Banner</p>
-    </div>
-    <div class="form-container d-flex flex-column justify-content-center align-items-center">
-        <p class="text-center text-white fw-bold fs-3">Add Banner</p>
-    </div>
-    <form action="/admin/add-banner" method="post" class="row col-12 " enctype="multipart/form-data">
-        <div class="col-md-6 col-12">
-            <div class="form-group files color">
-                <label>Banner Image </label>
-                <input type="file" class="form-control" name="banner_image" multiple="" required>
-              </div>
-        </div>
-        <div class="d-flex flex-column align-items-center col-md-6 col-12 px-3">
-            <div class="input-container d-flex flex-column col-12 py-1">
-                <label for="banner_title" class="text-white fw-bold fs-5 py-1">Banner Title</label>
-                <input type="text" name="banner_title" id="banner_title" class="rounded border-0 py-2 px-2" placeholder="Banner Name" required>
+        <section id="custom-container" class="container w-100 mt-3 mx-0 p-0">
+            <div class="bg-black">
+                <p class="text-white px-3 fw-bold py-3">Banner / Add Banner</p>
             </div>
-            <div class="input-container d-flex flex-column col-12 py-1">
-                <label for="banner_description" class="text-white fw-bold fs-5 py-1">Description</label>
-                <input type="text" name="banner_description" id="banner_description" class="rounded border-0 py-2 px-2" placeholder="Banner Description" required>
+            <div class="form-container d-flex flex-column justify-content-center align-items-center">
+                <p class="text-center text-white fw-bold fs-3">Add Banner</p>
             </div>
-           
-    
-            
-            
-        </div>
-        <%if (typeof err!="undefined" && err) {%>
-            <p class="text-danger text-center"><%=err%></p>
-        <%}%>
-       <div class="d-flex flex-row justify-content-center align-items-center col-12 py-2">
-            <button class="btn bg-white border-0 rounded mx-1 px-4 py-2"><a href="/admin/banner-management" class="text-dark text-decoration-none">Cancel</a></button>
-            <button class="btn bg-success border-0 rounded mx-1 px-4 py-2 text-white" type="submit">Add Banner</button>
-       </div>
-    </form>
-</section>
+            <form action="/admin/add-banner" method="post" class="row col-12 " enctype="multipart/form-data">
+                <div class="col-md-6 col-12">
+                    <div class="form-group files color">
+                        <label>Banner Image </label>
+                        <input type="file" class="form-control" name="banner_image" multiple="" required>
+                    </div>
+                </div>
+                <div class="d-flex flex-column align-items-center col-md-6 col-12 px-3">
+                    <div class="input-container d-flex flex-column col-12 py-1">
+                        <label for="banner_title" class="text-white fw-bold fs-5 py-1">Banner Title</label>
+                        <input type="text" name="banner_title" id="banner_title" class="rounded border-0 py-2 px-2"
+                            placeholder="Banner Name" required>
+                    </div>
+                    <div class="input-container d-flex flex-column col-12 py-1">
+                        <label for="banner_description" class="text-white fw-bold fs-5 py-1">Description</label>
+                        <input type="text" name="banner_description" id="banner_description"
+                            class="rounded border-0 py-2 px-2" placeholder="Banner Description" required>
+                    </div>
+                    <div class="input-container d-flex flex-column col-12 py-1">
+                        <label for="action_link" class="text-white fw-bold fs-5 py-1">Action URL</label>
+                        <input type="text" name="action_link" id="action_link" class="rounded border-0 py-2 px-2"
+                            placeholder="Banner Action Link" required>
+                    </div>
 
-<%- include('includes/admin/footer') %>
+
+
+
+                </div>
+                <%if (typeof err!="undefined" && err) {%>
+                    <p class="text-danger text-center">
+                        <%=err%>
+                    </p>
+                    <%}%>
+                        <div class="d-flex flex-row justify-content-center align-items-center col-12 py-2">
+                            <button class="btn bg-white border-0 rounded mx-1 px-4 py-2"><a
+                                    href="/admin/banner-management"
+                                    class="text-dark text-decoration-none">Cancel</a></button>
+                            <button class="btn bg-success border-0 rounded mx-1 px-4 py-2 text-white" type="submit">Add
+                                Banner</button>
+                        </div>
+            </form>
+        </section>
+
+        <%- include('includes/admin/footer') %>

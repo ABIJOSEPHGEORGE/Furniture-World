@@ -1,148 +1,274 @@
 <%- include('includes/users/head') %>
-<%- include('includes/users/header') %>
-<!--================Single Product Area =================-->
-<style>
-  figure.zoom {
-  background-position: 50% 50%;
-  position: relative;
-  overflow: hidden;
-  cursor: zoom-in;
-}
-figure.zoom img {
-  transition: opacity 0.5s;
-  display: block;
-  width: 100%;
-}
-figure.zoom img:hover {
-  opacity: 0;
-}
-</style>
-<div class="product_image_area section_padding">
-    <div class="container">
-      <div class="row s_product_inner justify-content-between">
-        <div class="col-lg-7 col-xl-7">
-          <div class="product_slider_img">
-            <div id="vertical">
-                <%
-                        product.images.forEach((image)=>{
-                            %>
-                            <div data-thumb="<%-image.URL%>" class="image-container">
-                              <figure class="zoom" onmousemove="zoom(event)" style="background-image: url(<%-image.URL%>)">
-                                <img class="image-zoom" src="<%-image.URL%>"/>
-                              </figure>
-                            </div>
-                            <%
-                        })
-                %>
+  <%- include('includes/users/header') %>
+    <!--================Single Product Area =================-->
+    <style>
+      figure.zoom {
+        background-position: 50% 50%;
+        position: relative;
+        overflow: hidden;
+        cursor: zoom-in;
+      }
+
+      figure.zoom img {
+        transition: opacity 0.5s;
+        display: block;
+        width: 100%;
+      }
+
+      figure.zoom img:hover {
+        opacity: 0;
+      }
+    </style>
+    <div class="product_image_area section_padding">
+      <div class="container">
+        <div class="row s_product_inner justify-content-between">
+          <div class="col-lg-7 col-xl-7">
+            <div class="product_slider_img">
+              <div id="vertical">
+                <% product.images.forEach((image)=>{
+                  %>
+                  <div data-thumb="<%-image.URL%>" class="image-container">
+                    <figure class="zoom" onmousemove="zoom(event)" style="background-image: url(<%-image.URL%>)">
+                      <img class="image-zoom" src="<%-image.URL%>" />
+                    </figure>
+                  </div>
+                  <% }) %>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-lg-5 col-xl-4">
-          <div class="s_product_text">
-            <h3><%-product.product_name%></h3>
-            <h2>₹ <%-product.sale_price%></h2>
-            <ul class="list">
-              <li>
-                <a class="active" href="#">
-                  <span>Category</span> : <%-parent.category_name%></a>
+          <div class="col-lg-5 col-xl-4">
+            <div class="s_product_text">
+              <h3><%-product.product_name%></h3>
+              <div class="d-flex">
+                <s></a>
+                  <h2 class="text-muted px-2">₹ <%-product.price%></h2>
+                </s>
+                <h2>₹ <%-product.sale_price%></h2>
+              </div>
+
+              <ul class="list">
+                <li>
+                  <a class="active" href="#">
+                    <span>Category</span> : <%-parent.charAt(0).toUpperCase()+parent.substring(1).replaceAll("-"," ")%></a>
               </li>
               <li>
                 <% if(product.stock>0){%>
-                    <a href="#"> <span>Availibility</span> : In Stock</a>
-                <%}else{%>
+                    <a href=" #"> <span>Availibility</span> : In Stock</a>
+                  <%}else{%>
                     <a href="#"> <span>Availibility</span> : Out Of Stock</a>
-                <%}%>
-                
-              </li>
-            </ul>
-            <p>
-              <%-product.description%>
-            </p>
-            <div class="card_area d-flex justify-content-between align-items-center col-12">
-              <div class="col-10 d-flex align-items-center justify-content-between">
-                <a href="/users/add-to-cart/<%-product._id%>" class="btn_3 text-center col-8">add to cart</a>
-                <a href="#" class="like_us"> <i class="ti-heart ms-3"></i> </a>
+                    <%}%>
+
+                </li>
+              </ul>
+              <p>
+                <%-product.description%>
+              </p>
+              <div class="card_area d-flex justify-content-between align-items-center col-12">
+                <div class="col-10 d-flex align-items-center justify-content-between">
+                  <%if(product.stock>0){%>
+                    <a onclick="addToCart('<%-product._id%>')" class="btn_3 text-center col-8 text-white"
+                      id="cart-btn">add to cart</a>
+                    <%}else{%>
+                      <a class="btn_3 text-center col-8 text-white py-lg-3 px-lg-3">Out Of Stock</a>
+                      <%}%>
+                        <a id="wishlist-icon" class="like_us"><i class="fa-regular fa-heart add-wishlist "
+                            style="cursor:pointer;font-size:23px" onclick="addToWishlist('<%-product._id%>')"
+                            id="wishlist"></i></a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!--================End Single Product Area =================-->
+    <!--================End Single Product Area =================-->
 
-  <!--================Product Description Area =================-->
-  <section class="product_description_area mt-0">
-    <div class="container">
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-            aria-selected="true">Description</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-            aria-selected="false">Measurements</a>
-        </li>
-      </ul>
-      <div class="tab-content" id="myTabContent">
-        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
-          <p><%-product.description%></p>
-        </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-          <div class="table-responsive">
-            <table class="table">
-              <tbody>
-                <tr>
-                  <td>
-                    <h5>Width</h5>
-                  </td>
-                  <td>
-                    <h5><%-product.measurements.width%> cm</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Height</h5>
-                  </td>
-                  <td>
-                    <h5><%-product.measurements.height%> cm</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Depth</h5>
-                  </td>
-                  <td>
-                    <h5><%-product.measurements.depth%> cm</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Weight</h5>
-                  </td>
-                  <td>
-                    <h5><%-product.measurements.max_load%> kg</h5>
-                  </td>
-                </tr>
-            
-              </tbody>
-            </table>
+    <!--================Product Description Area =================-->
+    <section class="product_description_area mt-0">
+      <div class="container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+              aria-selected="true">Description</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+              aria-selected="false">Measurements</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <p><%-product.description%></p>
+          </div>
+          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>
+                      <h5>Width</h5>
+                    </td>
+                    <td>
+                      <h5><%-product.measurements.width%> cm</h5>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <h5>Height</h5>
+                    </td>
+                    <td>
+                      <h5><%-product.measurements.height%> cm</h5>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <h5>Depth</h5>
+                    </td>
+                    <td>
+                      <h5><%-product.measurements.depth%> cm</h5>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <h5>Weight</h5>
+                    </td>
+                    <td>
+                      <h5><%-product.measurements.max_load%> kg</h5>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        </div>
       </div>
-    </div>
-  </section>
-  <!--================End Product Description Area =================-->
-  <script>
-    function zoom(e){
-      var zoomer = e.currentTarget;
-      e.offsetX ? offsetX = e.offsetX : offsetX = e.touches[0].pageX
-      e.offsetY ? offsetY = e.offsetY : offsetX = e.touches[0].pageX
-      x = offsetX/zoomer.offsetWidth*100
-      y = offsetY/zoomer.offsetHeight*100
-      zoomer.style.backgroundPosition = x + '%' + y + '%';
-    }  
-  </script>
-  
-  <%- include('includes/users/footer') %>
+      </div>
+    </section>
+    <!--================End Product Description Area =================-->
+    <script>
+
+      const cartbtn = document.getElementById('cart-btn');
+      const wishlist_icon = document.getElementById('wishlist-icon');
+      const wishlist = document.getElementById('wishlist');
+
+      gotoCart();
+      existWishlist();
+      function zoom(e) {
+        var zoomer = e.currentTarget;
+        e.offsetX ? offsetX = e.offsetX : offsetX = e.touches[0].pageX
+        e.offsetY ? offsetY = e.offsetY : offsetX = e.touches[0].pageX
+        x = offsetX / zoomer.offsetWidth * 100
+        y = offsetY / zoomer.offsetHeight * 100
+        zoomer.style.backgroundPosition = x + '%' + y + '%';
+      }
+
+      function addToWishlist(id) {
+        fetch(`http://localhost:3000/users/add-to-wishlist/${id}`)
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+            if (res === true) {
+              wishlist.classList.add('fa-solid');
+              wishlist.classList.remove('fa-regular');
+              wishlist.setAttribute("onclick", removeWishlist(`${id}`));
+            }
+          })
+          .cath((err) => {
+            location.href = "http://localhost:3000/users/signin";
+          })
+      }
+
+      function gotoCart() {
+        const cartExist = '<%-cartExist%>';
+        const stock = '<%-product.stock%>'
+        if (cartExist == "true" && stock > 0) {
+          cartbtn.innerText = "Go to Cart";
+          cartbtn.href = "http://localhost:3000/users/cart"
+          cartbtn.onclick = "";
+        }
+      }
+
+      function existWishlist() {
+        const wishlistExist = '<%-wishlistExist%>';
+        if (wishlistExist == "true") {
+          wishlist.classList.add('fa-solid');
+          wishlist.classList.remove('fa-regular');
+          wishlist.classList.add('text-danger')
+          wishlist.setAttribute("onclick", `removeWishlist("<%-product._id%>")`)
+        }
+      }
+
+      function addToCart(id) {
+        fetch(`http://localhost:3000/users/add-to-cart/${id}`)
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => {
+            if (res == true) {
+              cartbtn.innerText = "Go to Cart";
+              cartbtn.href = "http://localhost:3000/users/cart";
+              cartbtn.setAttribute("onclick", "")
+              cartCount()
+            }
+          })
+          .catch((err) => {
+            location.href = "http://localhost:3000/users/signin"
+          })
+      }
+
+      function cartCount() {
+        fetch('http://localhost:3000/users/cart-count')
+          .then((response) => {
+            return response.json()
+          })
+          .then((data) => {
+            JSON.stringify(data) === "{}" ? document.getElementById('cart-count').innerHTML = 0 : document.getElementById('cart-count').innerHTML = data;
+          });
+      }
+
+      // add and remove item from wishlist
+
+      function addToWishlist(id) {
+        fetch(`http://localhost:3000/users/add-to-wishlist/${id}`)
+          .then((response) => {
+            return response.json()
+          })
+          .then((data) => {
+            if (data == true) {
+              wishlist.classList.add('text-danger');
+              wishlist.classList.add('fa-solid');
+              wishlist.classList.remove('fa-regular');
+              wishlist.setAttribute("onclick", `removeWishlist("${id}")`);
+            }
+          })
+          .catch((err) => {
+            window.location.href = "http://localhost:3000/users/signin"
+          })
+
+      }
+
+      function removeWishlist(id) {
+        fetch(`http://localhost:3000/users/remove-wishlist-item/${id}`, {
+          method: "PUT"
+        })
+          .then((response) => {
+            return response.json()
+          })
+          .then((data) => {
+            if (data == true) {
+              wishlist.classList.remove('text-danger');
+              wishlist.classList.remove('fa-solid');
+              wishlist.classList.add('fa-regular');
+              wishlist.setAttribute("onclick", `addToWishlist("${id}")`);
+            }
+          })
+          .catch((err) => {
+            window.location.href = "http://localhost:3000/users/signin";
+          })
+      }
+    </script>
+
+
+    <%- include('includes/users/footer') %>
