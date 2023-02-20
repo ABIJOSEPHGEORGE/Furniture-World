@@ -1,4 +1,4 @@
-const eoVerify = require('eoVerify');
+const eoVerify = require('eoverify');
 
 module.exports = {
     generateOtp:async(inputEmail)=>{
