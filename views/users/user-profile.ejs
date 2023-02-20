@@ -120,7 +120,7 @@
 
 
 			function myProfile() {
-				fetch("http://localhost:3000/users/get-user-details")
+				fetch("https://www.furnitureworld.site/users/get-user-details")
 					.then((res) => {
 						return res.json()
 					})
@@ -161,7 +161,7 @@
 						}
 					})
 					.catch(() => {
-						location.href = "http://localhost:3000/users/signin";
+						location.href = "https://www.furnitureworld.site/users/signin";
 					})
 			}
 			// update profile
@@ -176,7 +176,7 @@
 
 				}
 
-				fetch(`http://localhost:3000/users/update-profile`, {
+				fetch(`https://www.furnitureworld.site/users/update-profile`, {
 					method: "POST",
 					body: JSON.stringify(data),
 					headers: new Headers({
@@ -199,7 +199,7 @@
 						}
 					})
 					.catch((err) => {
-						location.href = "http://localhost:3000/users/signin"
+						location.href = "https://www.furnitureworld.site/users/signin"
 					})
 			}
 
@@ -225,7 +225,7 @@
 		`
 				const select_address = document.getElementById('select_address');
 				const add_address = document.getElementById('add_addrs');
-				fetch("http://localhost:3000/users/all-address")
+				fetch("https://www.furnitureworld.site/users/all-address")
 					.then((res) => {
 						return res.json()
 					})
@@ -265,7 +265,7 @@
 
 					})
 					.catch((err) => {
-						location.href = "http://localhost:3000/users/signin"
+						location.href = "https://www.furnitureworld.site/users/signin"
 					})
 			}
 
@@ -364,14 +364,14 @@
 
 				})
 					.catch((err) => {
-						location.href = "http://localhost:3000/users/signin"
+						location.href = "https://www.furnitureworld.site/users/signin"
 					})
 			}
 
 
 
 			function editAdd(id) {
-				fetch(`http://localhost:3000/users/edit-address/${id}`)
+				fetch(`https://www.furnitureworld.site/users/edit-address/${id}`)
 					.then((res) => {
 						return res.json();
 					})
@@ -473,7 +473,7 @@
 
 								})
 									.catch((err) => {
-										location.href = "http://localhost:3000/users/signin"
+										location.href = "https://www.furnitureworld.site/users/signin"
 									})
 							})
 						}
@@ -482,7 +482,7 @@
 
 			// updating the address
 			function updateAdd(result) {
-				fetch(`http://localhost:3000/users/update-address/${result.id}`, {
+				fetch(`https://www.furnitureworld.site/users/update-address/${result.id}`, {
 					method: "PUT",
 					body: JSON.stringify(result),
 					headers: new Headers({
@@ -503,12 +503,12 @@
 						}
 					})
 					.catch((err) => {
-						location.href = "http://localhost:3000/users/signin"
+						location.href = "https://www.furnitureworld.site/users/signin"
 					})
 			}
 
 			function addNewAddrss(addr) {
-				fetch(`http://localhost:3000/users/add-new-address`,
+				fetch(`https://www.furnitureworld.site/users/add-new-address`,
 					{
 						method: "POST",
 						body: JSON.stringify(addr),
@@ -537,13 +537,13 @@
 						}
 					})
 					.catch((err) => {
-						location.href = "http://localhost:3000/users/signin"
+						location.href = "https://www.furnitureworld.site/users/signin"
 					})
 			}
 
 			// delete address
 			function deleteAddress(id) {
-				fetch(`http://localhost:3000/users/delete-address/${id}`, {
+				fetch(`https://www.furnitureworld.site/users/delete-address/${id}`, {
 					method: "DELETE"
 				})
 					.then((res) => {
@@ -555,12 +555,12 @@
 						}
 					})
 					.catch((err) => {
-						location.href = "http://localhost:3000/users/signin"
+						location.href = "https://www.furnitureworld.site/users/signin"
 					})
 			}
 
 			function orderHistory() {
-				fetch("http://localhost:3000/users/all-orders", {
+				fetch("https://www.furnitureworld.site/users/all-orders", {
 					method: "POST"
 				})
 					.then((res) => {
@@ -667,7 +667,7 @@
 
 					})
 					.catch((err) => {
-						location.href = "http://localhost:3000/users/signin"
+						location.href = "https://www.furnitureworld.site/users/signin"
 					})
 			}
 
@@ -703,7 +703,7 @@
 				const reset_pass_form = document.getElementById('reset-pass-form');
 				let formData = new FormData(reset_pass_form);
 				let data = Object.fromEntries(formData);
-				fetch("http://localhost:3000/users/profile-reset-password", {
+				fetch("https://www.furnitureworld.site/users/profile-reset-password", {
 					method: "PUT",
 					body: JSON.stringify(data),
 					headers: new Headers({
@@ -724,19 +724,19 @@
 								'Kindly please login again',
 								'success'
 							).then((res) => {
-								location.href = "http://localhost:3000/users/logout"
+								location.href = "https://www.furnitureworld.site/users/logout"
 							})
 						}
 					})
 					.catch((err) => {
-						location.href = "http://localhost:3000/users/signin"
+						location.href = "https://www.furnitureworld.site/users/signin"
 					})
 			}
 
 
 			// loading user wallet balance
 			function walletBalance() {
-				fetch("http://localhost:3000/users/wallet-balance")
+				fetch("https://www.furnitureworld.site/users/wallet-balance")
 					.then((res) => {
 						return res.json()
 					})
@@ -746,7 +746,7 @@
 						}
 					})
 					.catch((err) => {
-						location.href = "http://localhost:3000/users/signin";
+						location.href = "https://www.furnitureworld.site/users/signin";
 					})
 			}
 

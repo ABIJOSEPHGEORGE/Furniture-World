@@ -121,7 +121,7 @@
     </section>
     <script>
       function categoryAssign(prodId, catId) {
-        fetch(`http://localhost:3000/admin/fetch-subcategories/${catId}`, {
+        fetch(`https://www.furnitureworld.site/admin/fetch-subcategories/${catId}`, {
           method: "POST"
         })
           .then((res) => {
@@ -156,7 +156,7 @@
             })
               .then((data) => {
                 if (data.isConfirmed == true) {
-                  fetch(`http://localhost:3000/admin/update-product-subcategory/${prodId}?sub=${sub_category.value}`, {
+                  fetch(`https://www.furnitureworld.site/admin/update-product-subcategory/${prodId}?sub=${sub_category.value}`, {
                     method: "PUT"
                   })
                     .then((res) => {
@@ -179,7 +179,7 @@
                 }
               })
               .catch((err) => {
-                location.href = "http://localhost:3000/admin"
+                location.href = "https://www.furnitureworld.site/admin"
               })
           })
       }
