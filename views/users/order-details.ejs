@@ -157,6 +157,7 @@
                 return res.json()
               })
               .then((res) => {
+                console.log(res)
                 if(res.method==="cod"&&res.status===true){
                   Swal.fire(
                     'Canceled!',
