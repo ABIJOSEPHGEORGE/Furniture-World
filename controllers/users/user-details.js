@@ -170,23 +170,21 @@ module.exports = {
   cancelOrder: async (req, res) => {
     const orderId = req.params.id;
     try {
-      // getting the order bill amount and payment method
+      // getting the order bill amount
       const dbOrder = await Order.findOne({ _id: orderId });
-        const bill_amount = dbOrder.bill_amount;
-        // updating the order status
-        await Order.findByIdAndUpdate(orderId, { status: "canceled" });
-        if(dbOrder.payment_method==="cod"){
-          return res.json({method:"cod",status:true}
-          )
-        }else{
-          // crediting the bill amount to user wallet
-          await User.findOneAndUpdate(
-            { email: req.session.user },
-            { $inc: { wallet_balance: parseInt(bill_amount) } }
-          );
-          res.status(200).json(true);
-        }
-        
+      const bill_amount = dbOrder.bill_amount;
+      // updating the order status
+      await Order.findByIdAndUpdate(orderId, { status: "canceled" });
+      if(dbOrder.payment_method==="cod"){
+        return res.json({method:"cod",status:true})
+      }else{
+        // crediting the bill amount to user wallet
+        await User.findOneAndUpdate(
+          { email: req.session.user },
+          { $inc: { wallet_balance: parseInt(bill_amount) } }
+        );
+        res.status(200).json(true);
+      }
       
     } catch (err) {
       res.status(500).json(false);

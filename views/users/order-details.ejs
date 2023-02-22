@@ -150,7 +150,7 @@
           cancelButtonText: 'Back'
         }).then((result) => {
           if (result.isConfirmed) {
-            fetch(`https://www.furnitureworld.site/users/cancel-order/${id}`, {
+            fetch(`http://localhost:3000/users/cancel-order/${id}`, {
               method: "PUT"
             })
               .then((res) => {
@@ -160,7 +160,7 @@
                 if(res.method==="cod"&&res.status==true){
                   Swal.fire(
                     'Canceled!',
-                    'Your order has canceled Successfully.',
+                    'Your order has canceled successfully',
                     'success'
                   )
                     .then((result) => {
@@ -184,7 +184,7 @@
           }
         })
           .catch((err) => {
-            location.href = "https://www.furnitureworld.site/users/signin";
+            location.href = "http://localhost:3000/users/signin";
           })
       }
 
@@ -200,7 +200,7 @@
           cancelButtonText: 'Back'
         }).then((result) => {
           if (result.isConfirmed) {
-            fetch(`https://www.furnitureworld.site/users/return-order/${id}`, {
+            fetch(`http://localhost:3000/users/return-order/${id}`, {
               method: "PUT"
             })
               .then((res) => {
@@ -223,7 +223,7 @@
           }
         })
           .catch((err) => {
-            location.href = "https://www.furnitureworld.site/users/signin";
+            location.href = "http://localhost:3000/users/signin";
           })
       }
     </script>
