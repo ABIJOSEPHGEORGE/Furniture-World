@@ -157,8 +157,7 @@
                 return res.json()
               })
               .then((res) => {
-                console.log(res)
-                if(res.method==="cod"&&res.status===true){
+                if(res.method==="cod"&&res.status==true){
                   Swal.fire(
                     'Canceled!',
                     'Your order has canceled Successfully.',
@@ -169,8 +168,7 @@
                         location.reload()
                       }
                     })
-                }
-                else if (res == true) {
+                }else if (res == true) {
                   Swal.fire(
                     'Canceled!',
                     'Your order has canceled and refund credited to wallet.',

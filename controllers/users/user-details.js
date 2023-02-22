@@ -176,8 +176,7 @@ module.exports = {
         // updating the order status
         await Order.findByIdAndUpdate(orderId, { status: "canceled" });
         if(dbOrder.payment_method==="cod"){
-          return res.json(
-            {method:"cod",status:true}
+          return res.json({method:"cod",status:true}
           )
         }else{
           // crediting the bill amount to user wallet
