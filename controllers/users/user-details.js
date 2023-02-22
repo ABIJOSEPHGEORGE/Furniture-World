@@ -172,8 +172,8 @@ module.exports = {
     try {
       // getting the order bill amount and payment method
       const dbOrder = await Order.findOne({ _id: orderId });
-      if(dbOrder.payment_method==="cod"){
-        return res.status(200).json({method:"cod",status:true})
+      if(dbOrder.payment_method=="cod"){
+        res.status(200).json({method:"cod",status:true})
       }else{
         const bill_amount = dbOrder.bill_amount;
         // updating the order status
