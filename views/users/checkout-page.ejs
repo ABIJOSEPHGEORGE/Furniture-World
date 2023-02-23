@@ -158,8 +158,8 @@
                   </div>
                   <div class="payment_item active wallet-payment d-none">
                     <div class="radion_btn">
-                      <input type="radio" id="f-option7" class="wallet-payment" name="payment" value="wallet" checked />
-                      <label for="f-option7">Wallet</label>
+                      <input type="radio" id="wallet-payment-option" class="d-none" name="payment" value="wallet"/>
+                      <label for="wallet-payment-option">Wallet</label>
                       <img src="img/product/single-product/card.jpg" alt="" />
                       <div class="check"></div>
                     </div>
@@ -212,6 +212,7 @@
       const wallet_discount = document.querySelector('.wallet-dis');
       const wallet_discount_amount = document.getElementById('wallet-disamount');
       const payment_methods = document.querySelector('.payment_methods');
+      const wallet_payment_option = document.getElementById('wallet-payment-option');
       let sub_total_amount;
 
 
@@ -333,8 +334,13 @@
 
         let formData = new FormData(checkout_form);
         let data = Object.fromEntries(formData);
-
-        if (address_block.classList.contains('d-none')) {
+        if(!data.payment){
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please select a payment method',
+          })
+        }else if (address_block.classList.contains('d-none')) {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -892,6 +898,7 @@
                 document.querySelector('.online-payment').classList.add('d-none');
                 document.querySelector('.cod-payment').classList.add('d-none');
                 document.querySelector('.wallet-payment').classList.remove('d-none');
+                wallet_payment_option.checked = true;
               }
               Swal.fire(
                 'hola!',
