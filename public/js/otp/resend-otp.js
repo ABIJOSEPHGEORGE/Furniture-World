@@ -7,7 +7,7 @@ var timeLeft = 60;
     var otpTimer = setInterval(()=>{
         if(timeLeft<=0){
             clearInterval(otpTimer);
-            resend_otp.innerHTML = `<a href="/users/resend-otp" id="resend-otp">resend otp</a>`;
+            resend_otp.innerHTML = `<a href="/users/resend-otp" id="resend-otp" >resend otp</a>`;
             
         }else{
             success_otp.style = "visibility:hidden";
@@ -15,11 +15,16 @@ var timeLeft = 60;
         }
         timeLeft-=1;
     },1000);
-
-    verify_btn.addEventListener('click',()=>{
-        success_otp.style = "visibility:hidden";
-    })
-
+    document.onload=successotp()
+    function successotp(){
+        Swal.fire({
+            position: 'center-center',
+            icon: 'success',
+            title: 'Otp has been sent to your email',
+            showConfirmButton: false,
+            timer: 2000
+          })
+    }
     // Handling the Confirm form resubmission
 		if ( window.history.replaceState ) {
 			window.history.replaceState( null, null, window.location.href );

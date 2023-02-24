@@ -42,7 +42,7 @@ module.exports = {
             });
       })
       .catch((err) => {
-        res.redirect("/users/page-not-found");
+        res.redirect("/users/signin");
       });
   },
 
@@ -75,6 +75,9 @@ module.exports = {
         : res.render("user-signup", {
             err: "Error in generating otp, Try after sometimes",
           });
-    });
+    })
+    .catch((err)=>{
+      res.redirect('/users/signin');
+    })
   },
 };

@@ -18,17 +18,19 @@
                                     </div>
 
                                 </div>
-
+                               
                                 <div class="col-12 d-flex flex-md-row flex-column-reverse ">
 
                                     <button value="Cancel" class="btn_3 col-md-6 col-12 mr-md-3 my-2 my-md-0">
                                         <a href="/users/signin" class="tex-decoration-none text-white">Cancel</a>
                                     </button>
+                                    
                                     <button id="verify-btn" type="submit" value="verify"
                                         class="btn_3 col-md-6 col-12 mr-md-3 my-2 my-md-0">
                                         Verify
                                     </button>
                                 </div>
+                                
                                 <%if (typeof err!="undefined" && err) {%>
                                     <p class="text-danger text-center">
                                         <%=err%>
