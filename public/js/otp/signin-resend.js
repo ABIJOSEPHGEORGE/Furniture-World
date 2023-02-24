@@ -11,7 +11,7 @@ var timeLeft = 60;
             
         }else{
             success_otp.style = "visibility:hidden";
-            resend_otp.innerHTML = `<a href="#" class="text-dark" id="resend-otp">resend otp in ${timeLeft}</a>`;
+            resend_otp.innerHTML = `<a class="text-dark" id="resend-otp">resend otp in ${timeLeft}</a>`;
         }
         timeLeft-=1;
     },1000);

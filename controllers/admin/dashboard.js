@@ -3,12 +3,15 @@ const csv = require("csv-express");
 const User = require("../../models/users-schema");
 const Product = require("../../models/products-schema");
 
+
+
 module.exports = {
   salesReportPage: (req, res) => {
     res.render("sales-report");
   },
+  // csv sales report
   salesReport: async (req, res) => {
-    const fileName = "order.csv";
+    const fileName = "report.csv";
 
     Order.find({
       $and: [
@@ -22,15 +25,37 @@ module.exports = {
       ],
     })
       .lean()
-      .exec({}, function (err, orders) {
+      .populate('userId')
+      .exec({}, async function (err, orders) {
         if (err) res.redirect("/users/page-not-found");
         res.setHeader("Content-Type", "text/csv");
         res.setHeader(
           "Content-Disposition",
           "attachment; filename=" + fileName
         );
-        res.csv(orders, true);
-      });
+          let report = await Promise.all(orders.map(async(ele)=>{
+            let data = {
+              order_id : ele._id,
+              user : ele.userId.email,
+              
+            }
+            let {first_name,last_name,company_name,phone_number,add_line_one,add_line_two,email,city,state,zip} = ele.billing_address;
+            data.first_name = first_name;
+            data.last_name = last_name;
+            data.phone_number = phone_number;
+            data.email = email;
+            data.billing_address = [company_name,add_line_one,add_line_two,city,state,zip];
+            await ele.products.forEach((prdct)=>{
+              let products = []
+              products.push(prdct.item.product_name)
+              data.products =  products;
+            })
+            return data;
+          }))
+          
+          res.csv(report,true)
+        })
+
   },
   // admin dashboard
   dashboardPage: async (req, res) => {
