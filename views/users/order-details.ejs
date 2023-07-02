@@ -150,7 +150,7 @@
           cancelButtonText: 'Back'
         }).then((result) => {
           if (result.isConfirmed) {
-            fetch(`https://www.furnitureworld.site/users/cancel-order/${id}`, {
+            fetch(`https://furnitureworld.site/users/cancel-order/${id}`, {
               method: "PUT"
             })
               .then((res) => {

@@ -222,7 +222,7 @@
       walletBalance();
       // fetching the cart items and total
       function fetchItems() {
-        fetch('https://www.furnitureworld.site/users/checkout', {
+        fetch('https://furnitureworld.site/users/checkout', {
           method: "POST"
         })
           .then((res) => {
@@ -230,7 +230,7 @@
           })
           .then((data) => {
             if (data.products.length === 0) {
-              return window.location.href = "https://www.furnitureworld.site/users/cart"
+              return window.location.href = "https://furnitureworld.site/users/cart"
             } else {
               data.products.forEach((ele) => {
                 let details = `
@@ -270,7 +270,7 @@
       function applyCoupon(data) {
         let couponName = data.couponName;
 
-        fetch(`https://www.furnitureworld.site/users/apply-coupon/${couponName}`, {
+        fetch(`https://furnitureworld.site/users/apply-coupon/${couponName}`, {
           method: "POST"
         })
           .then((res) => {
@@ -293,13 +293,13 @@
             }
           })
           .catch((err) => {
-            window.location.href = "https://www.furnitureworld.site/users/cart";
+            window.location.href = "https://furnitureworld.site/users/cart";
           })
       }
 
       // clear coupon
       function clearCoupon() {
-        fetch(`https://www.furnitureworld.site/users/clear-coupon/${coupon_input.value}`, {
+        fetch(`https://furnitureworld.site/users/clear-coupon/${coupon_input.value}`, {
           method: "POST"
         })
           .then((res) => {
@@ -307,7 +307,7 @@
           })
           .then((res) => {
             if (res.status == false) {
-              return window.location.href = "https://www.furnitureworld.site/users/signin";
+              return window.location.href = "https://furnitureworld.site/users/signin";
             }
             sub_total.innerHTML = "₹" + `${res.subTotal}`;
             sub_total_amount = res.subTotal;
@@ -323,7 +323,7 @@
           })
           .catch((err) => {
 
-            window.location.href = "https://www.furnitureworld.site/users/signin";
+            window.location.href = "https://furnitureworld.site/users/signin";
           })
       }
 
@@ -349,7 +349,7 @@
           
         }else if (data.payment === "online" && !address_block.classList.contains('d-none')) {
           // getting the order id
-          fetch(`https://www.furnitureworld.site/users/checkout/create-order/${sub_total_amount}`, {
+          fetch(`https://furnitureworld.site/users/checkout/create-order/${sub_total_amount}`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: new Headers({
@@ -369,7 +369,7 @@
                 "description": "Test Transaction",
                 "image": "/img/main-logo.png",
                 "order_id": res.orderId,
-                "callback_url": `https://www.furnitureworld.site/users/order-confirmation/${res.dbOrderId}`,
+                "callback_url": `https://furnitureworld.site/users/order-confirmation/${res.dbOrderId}`,
                 "theme": {
                   "color": "#ff3368"
                 }
@@ -379,10 +379,10 @@
               event.preventDefault();
             })
             .catch((err) => {
-              window.location.href = "https://www.furnitureworld.site/users/signin";
+              window.location.href = "https://furnitureworld.site/users/signin";
             })
         } else if (data.payment === "cod" || data.payment === "wallet" && !address_block.classList.contains('d-none')) {
-          fetch(`https://www.furnitureworld.site/users/checkout/create-order/${sub_total_amount}`, {
+          fetch(`https://furnitureworld.site/users/checkout/create-order/${sub_total_amount}`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: new Headers({
@@ -394,10 +394,10 @@
               return res.json()
             })
             .then((res) => {
-              location.href = `https://www.furnitureworld.site/users/cod-order-confirm/${res.status}`
+              location.href = `https://furnitureworld.site/users/cod-order-confirm/${res.status}`
             })
             .catch((err) => {
-              location.href = "https://www.furnitureworld.site/users/signin";
+              location.href = "https://furnitureworld.site/users/signin";
             })
         }
 
@@ -405,7 +405,7 @@
 
       // product stock checking
       function stockChecking() {
-        fetch("https://www.furnitureworld.site/users/stock-status", {
+        fetch("https://furnitureworld.site/users/stock-status", {
           method: "POST"
         })
           .then((res) => {
@@ -421,7 +421,7 @@
                 payment_btn.classList.add('d-none')
 
                 primary_action.addEventListener('click', () => {
-                  fetch(`https://www.furnitureworld.site/users/add-to-wishlist/${sts.id}`)
+                  fetch(`https://furnitureworld.site/users/add-to-wishlist/${sts.id}`)
                     .then((res) => {
                       return res.json()
                     })
@@ -439,7 +439,7 @@
                         timer: 2000,
                         showConfirmButton: false
                       })
-                        .then((res) => location.href = "https://www.furnitureworld.site/users/cart")
+                        .then((res) => location.href = "https://furnitureworld.site/users/cart")
                     })
                 })
 
@@ -454,7 +454,7 @@
 
 
       function removeFrmCart(id, msg) {
-        fetch(`https://www.furnitureworld.site/users/remove-item/${id}`, {
+        fetch(`https://furnitureworld.site/users/remove-item/${id}`, {
           method: "DELETE"
         })
           .then((res) => {
@@ -468,7 +468,7 @@
               showConfirmButton: false
             })
               .then((result) => {
-                location.href = "https://www.furnitureworld.site/users/checkout"
+                location.href = "https://furnitureworld.site/users/checkout"
               })
           })
       }
@@ -572,7 +572,7 @@
       })
 
       function addNewAddrss(addr) {
-        fetch(`https://www.furnitureworld.site/users/add-new-address`,
+        fetch(`https://furnitureworld.site/users/add-new-address`,
           {
             method: "POST",
             body: JSON.stringify(addr),
@@ -601,12 +601,12 @@
             }
           })
           .catch((err) => {
-            location.href = "https://www.furnitureworld.site/users/signin"
+            location.href = "https://furnitureworld.site/users/signin"
           })
       }
 
       function fetchAllAdress() {
-        fetch("https://www.furnitureworld.site/users/all-address")
+        fetch("https://furnitureworld.site/users/all-address")
           .then((res) => {
             return res.json()
           })
@@ -649,7 +649,7 @@
 
 
       function editAdd(id) {
-        fetch(`https://www.furnitureworld.site/users/edit-address/${id}`)
+        fetch(`https://furnitureworld.site/users/edit-address/${id}`)
           .then((res) => {
             return res.json();
           })
@@ -757,7 +757,7 @@
 
       // updating the address
       function updateAdd(result) {
-        fetch(`https://www.furnitureworld.site/users/update-address/${result.id}`, {
+        fetch(`https://furnitureworld.site/users/update-address/${result.id}`, {
           method: "PUT",
           body: JSON.stringify(result),
           headers: new Headers({
@@ -778,12 +778,12 @@
             }
           })
           .catch((err) => {
-            location.href = "https://www.furnitureworld.site/users/signin"
+            location.href = "https://furnitureworld.site/users/signin"
           })
       }
 
       function selectAddress(id) {
-        fetch(`https://www.furnitureworld.site/users/edit-address/${id}`)
+        fetch(`https://furnitureworld.site/users/edit-address/${id}`)
           .then((res) => {
             return res.json();
           })
@@ -855,7 +855,7 @@
 
       // loading user wallet balance
       function walletBalance() {
-        fetch("https://www.furnitureworld.site/users/wallet-balance")
+        fetch("https://furnitureworld.site/users/wallet-balance")
           .then((res) => {
             return res.json()
           })
@@ -870,13 +870,13 @@
             }
           })
           .catch((err) => {
-            location.href = "https://www.furnitureworld.site/users/signin";
+            location.href = "https://furnitureworld.site/users/signin";
           })
       }
 
       // applying wallet balance
       function applyWalletBalance() {
-        fetch(`https://www.furnitureworld.site/users/apply-wallet-balance`, {
+        fetch(`https://furnitureworld.site/users/apply-wallet-balance`, {
           method: "POST"
         })
           .then((res) => {
@@ -908,7 +908,7 @@
             }
           })
           .catch((err) => {
-            location.href = "https://www.furnitureworld.site/users/signin"
+            location.href = "https://furnitureworld.site/users/signin"
           })
       }
 
