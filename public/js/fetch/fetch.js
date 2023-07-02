@@ -10,7 +10,7 @@ window.onload = cartCount();
 //fetching  cart count
 
 function cartCount() {
-  fetch("https://www.furnitureworld.site/users/cart-count")
+  fetch("https://furnitureworld.site/users/cart-count")
     .then((response) => {
       return response.json();
     })

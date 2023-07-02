@@ -214,7 +214,7 @@
             parentCategories()
             // fetching categories and sub categories
             function parentCategories() {
-                fetch(`https://www.furnitureworld.site/admin/fetch-categories/<%-product._id%>`, {
+                fetch(`https://furnitureworld.site/admin/fetch-categories/<%-product._id%>`, {
                     method: "POST"
                 })
                     .then((res) => {
@@ -239,7 +239,7 @@
                     })
             }
 
-            fetch('https://www.furnitureworld.site/admin/all-subcategories')
+            fetch('https://furnitureworld.site/admin/all-subcategories')
                 .then((res) => {
                     return res.json()
                 })

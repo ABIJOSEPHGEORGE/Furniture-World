@@ -30,7 +30,7 @@
 
       fetchingOrders()
       function fetchingOrders() {
-        fetch("https://www.furnitureworld.site/admin/order-management", {
+        fetch("https://furnitureworld.site/admin/order-management", {
           method: "POST"
         })
           .then((res) => {
@@ -96,7 +96,7 @@
 
 
       function updateStatus(id) {
-        fetch(`https://www.furnitureworld.site/admin/order-status/${id}`, {
+        fetch(`https://furnitureworld.site/admin/order-status/${id}`, {
           method: "POST"
         })
           .then((res) => {
@@ -134,7 +134,7 @@
               .then((res) => {
                 if (res.isConfirmed == true) {
                   let status = document.getElementById('status').value;
-                  fetch(`https://www.furnitureworld.site/admin/update-order-status/${id}?status=${status}`, {
+                  fetch(`https://furnitureworld.site/admin/update-order-status/${id}?status=${status}`, {
                     method: "PUT"
                   })
                     .then((res) => {
@@ -146,7 +146,7 @@
                       }
                     })
                     .catch((err) => {
-                      location.href = "https://www.furnitureworld.site/admin";
+                      location.href = "https://furnitureworld.site/admin";
                     })
                 }
               })

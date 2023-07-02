@@ -8,7 +8,7 @@ let orderReturned = [];
 let curr = new Date()
 let week = []
 
-fetch("https://www.furnitureworld.site/admin/graph-data",{
+fetch("https://furnitureworld.site/admin/graph-data",{
     method:"POST"
 })
 .then((res)=>{
@@ -309,7 +309,7 @@ fetch("https://www.furnitureworld.site/admin/graph-data",{
     });
 })
 
-fetch("https://www.furnitureworld.site/admin/monthly-data",{
+fetch("https://furnitureworld.site/admin/monthly-data",{
     method:"POST"
 })
 .then((res)=>{

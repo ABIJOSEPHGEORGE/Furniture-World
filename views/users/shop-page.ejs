@@ -152,7 +152,7 @@
                 var sorBy = sort;
                 var p = page;
 
-                fetch(`https://www.furnitureworld.site/users/store/${category}?sub=${sub}&sort=${sort}&p=${page}&price=${pr}&search_key=${search_key}`, {
+                fetch(`https://furnitureworld.site/users/store/${category}?sub=${sub}&sort=${sort}&p=${page}&price=${pr}&search_key=${search_key}`, {
                     method: "GET"
                 })
                     .then((response) => {
@@ -199,7 +199,7 @@
                                         </div>
                                         
                                         <div class="d-flex justify-content-between">
-                                            <a href='https://www.furnitureworld.site/users/view-product/${prdct._id}' id="view_product">View Product
+                                            <a href='https://furnitureworld.site/users/view-product/${prdct._id}' id="view_product">View Product
                                                 <a id="wishlist+${prdct._id}" class="wishlist"></a>
                                             </a>
                                           
@@ -266,7 +266,7 @@
             function allSubCategories() {
                 let params = new URLSearchParams(window.location.search);
                 let category = params.get('category');
-                fetch(`https://www.furnitureworld.site/users/store/${category}?sub=undefined&sort=undefined&p=undefined&price=undefined&search_key=null`, {
+                fetch(`https://furnitureworld.site/users/store/${category}?sub=undefined&sort=undefined&p=undefined&price=undefined&search_key=null`, {
                     method: "GET"
                 })
                     .then((response) => {
@@ -286,7 +286,7 @@
             }
 
             function addToWishlist(id) {
-                fetch(`https://www.furnitureworld.site/users/add-to-wishlist/${id}`)
+                fetch(`https://furnitureworld.site/users/add-to-wishlist/${id}`)
                     .then((response) => {
                         return response.json()
                     })
@@ -302,13 +302,13 @@
                     })
                     .catch((err) => {
 
-                        window.location.href = "https://www.furnitureworld.site/users/signin"
+                        window.location.href = "https://furnitureworld.site/users/signin"
                     })
 
             }
 
             function removeWishlist(id) {
-                fetch(`https://www.furnitureworld.site/users/remove-wishlist-item/${id}`, {
+                fetch(`https://furnitureworld.site/users/remove-wishlist-item/${id}`, {
                     method: "PUT"
                 })
                     .then((response) => {
@@ -326,7 +326,7 @@
                     })
                     .catch((err) => {
 
-                        window.location.href = "https://www.furnitureworld.site/users/signin";
+                        window.location.href = "https://furnitureworld.site/users/signin";
                     })
             }
 
